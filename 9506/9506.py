@@ -15,9 +15,9 @@ while True:
   print(s_num)
 
   if s_num == n:
-     print(f"{n} = ", end="")
-     print(" + ".join(map(str, list)))
+    print("완전")
+
   else:
     print("{} is NOT perfect.".format(n))
     
-# print 처음걸 어떻게 해야될지 모르겠다 솔직히 
+# print 처음걸 어떻게 해야될지 모르겠다
