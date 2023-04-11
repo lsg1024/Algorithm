@@ -28,9 +28,9 @@ graph[1].append((0,7))
 
 # 노드 2에 연결된 노드 정보 저장
 graph[2].append((0,5))
-# print(graph)
+print(graph)
 
-# DFS 예제
+# DFS 예제 - 142
 def dfs(graph, v, visited):
     visited[v] = True
     print(v, end=" ")
@@ -53,4 +53,45 @@ graph = [
 
 visited = [False] * 9
 
+# 정의된 DFS 함수 호출
 dfs(graph, 1, visited)
+print("\n")
+
+# BFS 예제
+from collections import deque
+
+# BFS 메서드 정의
+def bfs(graph, start, visited):
+    
+    queue = deque([start])
+    
+    visited[start] = True
+    
+    while queue:
+        
+        v = queue.popleft()
+        print(v, end=" ")
+    
+        # 해당 원소와 연결된, 아직 방문하지 않은 원소들을 큐에 삽입
+        for i in graph[v]:
+            if not visited[i]:
+                queue.append(i)
+                visited[i] = True
+                
+graph = [
+    [],
+    [2, 3, 8],
+    [1, 7],
+    [1, 4, 5],
+    [3, 5],
+    [3, 4],
+    [7],
+    [2, 6, 8],
+    [1, 7]
+]           
+
+visited = [False] * 9
+
+bfs(graph, 1, visited)   
+print("\n")
+
