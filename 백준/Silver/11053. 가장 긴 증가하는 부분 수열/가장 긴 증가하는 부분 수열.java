@@ -1,29 +1,52 @@
 import java.util.*;
+import java.lang.*;
 import java.io.*;
 
-public class Main {
+class Main {
+    static int a;
+    static int[] a_list, LTS;
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        int n = Integer.parseInt(br.readLine());
-        int[] arr = new int[n];
+
+        a = Integer.parseInt(br.readLine());
+
+        a_list = new int[a];
+        LTS = new int[a];
+
         StringTokenizer st = new StringTokenizer(br.readLine());
-        for (int i = 0; i < n; i++) {
-            arr[i] = Integer.parseInt(st.nextToken());
+        
+        for (int i = 0; i < a; i++) {
+            a_list[i] = Integer.parseInt(st.nextToken());
         }
 
-        ArrayList<Integer> L = new ArrayList<>();
-        for (int num : arr) {
-            if (L.size() == 0 || num > L.get(L.size() - 1)) {
-                L.add(num);
-            } else {
-                int pos = Collections.binarySearch(L, num);
-                if (pos < 0) {
-                    pos = -pos - 1; 
+        LTS[0] = a_list[0];
+        int length = 1;
+
+        for (int i = 1; i < a; i++) {
+            int key = a_list[i];
+
+            if (LTS[length - 1] < key) {
+                length++;
+                LTS[length - 1] = key;
+            }
+            else {
+                int low = 0;
+                int high = length;
+                while (low < high) {
+                    int mid = (low + high) / 2;
+
+                    if (LTS[mid] < key) {
+                        low = mid + 1;
+                    }
+                    else {
+                        high = mid;
+                    }
                 }
-                L.set(pos, num);
+                LTS[low] = key;
             }
         }
 
-        System.out.println(L.size());
+        System.out.println(length);
+        
     }
 }
