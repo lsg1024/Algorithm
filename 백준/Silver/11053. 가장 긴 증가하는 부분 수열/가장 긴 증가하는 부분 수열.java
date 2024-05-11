@@ -1,49 +1,29 @@
 import java.util.*;
-import java.lang.*;
 import java.io.*;
 
-class Main {
-    static int a;
-    static int[] a_list;
-    static Integer[] dp;
+public class Main {
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-
-        a = Integer.parseInt(br.readLine());
-
-        a_list = new int[a];
-        dp = new Integer[a];
-
+        int n = Integer.parseInt(br.readLine());
+        int[] arr = new int[n];
         StringTokenizer st = new StringTokenizer(br.readLine());
-        
-        for (int i = 0; i < a; i++) {
-            a_list[i] = Integer.parseInt(st.nextToken());
+        for (int i = 0; i < n; i++) {
+            arr[i] = Integer.parseInt(st.nextToken());
         }
 
-        for (int i = 0; i < a; i++) {
-            LIS(i);
-        }
-
-        int max = dp[0];
-
-        for (int i = 1; i < a; i++) {
-            max = Math.max(max, dp[i]);
-        }
-
-        System.out.println(max);
-        
-    }
-
-    static int LIS(int n) {
-        if (dp[n] == null) {
-            dp[n] = 1;
-
-            for (int i = n - 1; i >= 0; i--) {
-                if (a_list[i] < a_list[n]) {
-                    dp[n] = Math.max(dp[n], LIS(i) + 1);
+        ArrayList<Integer> L = new ArrayList<>();
+        for (int num : arr) {
+            if (L.size() == 0 || num > L.get(L.size() - 1)) {
+                L.add(num);
+            } else {
+                int pos = Collections.binarySearch(L, num);
+                if (pos < 0) {
+                    pos = -pos - 1; 
                 }
+                L.set(pos, num);
             }
         }
-        return dp[n];
+
+        System.out.println(L.size());
     }
 }
