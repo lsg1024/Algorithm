@@ -3,46 +3,48 @@ import java.lang.*;
 import java.io.*;
 
 class Main {
-    static int a;
-    static int[] a_list, LTS;
+
+    static int n;
+    static int[] a, result;
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 
-        a = Integer.parseInt(br.readLine());
+        n = Integer.parseInt(br.readLine());
 
-        a_list = new int[a];
-        LTS = new int[a];
+        a = new int[n];
+        result = new int[n];
 
         StringTokenizer st = new StringTokenizer(br.readLine());
-        
-        for (int i = 0; i < a; i++) {
-            a_list[i] = Integer.parseInt(st.nextToken());
+
+        for (int i = 0; i < n; i++) {
+            a[i] = Integer.parseInt(st.nextToken());
         }
 
-        LTS[0] = a_list[0];
+        result[0] = a[0];
         int length = 1;
 
-        for (int i = 1; i < a; i++) {
-            int key = a_list[i];
+        for (int i = 1; i < n; i++) {
+            int num = a[i];
 
-            if (LTS[length - 1] < key) {
+            if (result[length - 1] < num) {
+                result[length] = num;
                 length++;
-                LTS[length - 1] = key;
             }
             else {
                 int low = 0;
                 int high = length;
+
                 while (low < high) {
                     int mid = (low + high) / 2;
 
-                    if (LTS[mid] < key) {
-                        low = mid + 1;
-                    }
+                    if (result[mid] < num) {
+                        low = mid+ 1;
+                    } 
                     else {
                         high = mid;
                     }
                 }
-                LTS[low] = key;
+                result[low] = num;
             }
         }
 
