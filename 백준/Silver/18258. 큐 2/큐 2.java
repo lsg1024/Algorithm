@@ -1,4 +1,5 @@
 import java.util.*;
+import java.lang.*;
 import java.io.*;
 
 class Main {
@@ -11,19 +12,19 @@ class Main {
 
         StringBuilder sb = new StringBuilder();
         
-        int last = 0; // 마지막으로 push된 숫자
+        int last = 0;
         for (int i = 0; i < n; i++) {
 
             StringTokenizer st = new StringTokenizer(br.readLine());
 
-            String command = st.nextToken();
+            String commend = st.nextToken();
             
-            if (command.equals("push")) {
+            if (commend.equals("push")) {
                 int number = Integer.parseInt(st.nextToken());
                 queue.add(number);
                 last = number;
             }
-            else if (command.equals("pop")) {
+            else if (commend.equals("pop")) {
                 if (queue.peek() != null) {
                     sb.append(queue.poll()).append("\n");  
                 }
@@ -31,10 +32,10 @@ class Main {
                     sb.append("-1").append("\n");
                 }
             }
-            else if (command.equals("size")) {
+            else if (commend.equals("size")) {
                 sb.append(queue.size()).append("\n");
             }
-            else if (command.equals("empty")) {
+            else if (commend.equals("empty")) {
                 if (queue.isEmpty()) {
                     sb.append("1").append("\n");  
                 }
@@ -42,20 +43,21 @@ class Main {
                     sb.append("0").append("\n");  
                 }
             }
-            else if (command.equals("front")){
+            else if (commend.equals("front")){
                 if (queue.peek() == null) {
                     sb.append("-1").append("\n");   
                 } else {
                     sb.append(queue.peek()).append("\n");  
                 } 
             }
-            else if (command.equals("back")) {
+            else {
                 if (queue.isEmpty()) {
                     sb.append("-1").append("\n");  
                 }
                 else {
                     sb.append(last).append("\n");  
                 }
+                
             }
         }
 
