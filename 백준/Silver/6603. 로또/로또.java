@@ -8,6 +8,8 @@ class Main {
     public static void main(String[] args) throws IOException {
         Scanner sc = new Scanner(System.in);
 
+        StringBuilder sb = new StringBuilder();
+
         while (true) {
 
             int k = sc.nextInt();
@@ -31,14 +33,21 @@ class Main {
                         for (int l = q + 1; l < k; l++) {
                             for (int o = l + 1; o < k; o++)  {
                                 for (int p = o + 1; p < k; p++) {
-                                    System.out.println(numbers[i] + " " + numbers[j] + " " + numbers[q] + " " + numbers[l] + " " + numbers[o] + " " + numbers[p]);
+                                    sb.append(numbers[i]).append(" ");
+                                    sb.append(numbers[j]).append(" ");
+                                    sb.append(numbers[q]).append(" ");
+                                    sb.append(numbers[l]).append(" ");
+                                    sb.append(numbers[o]).append(" ");
+                                    sb.append(numbers[p]).append(" ").append("\n");
                                 }
                             }
                         }
                     }
                 }
             }
-            System.out.println();
+            sb.append("\n");
         }
+
+        System.out.println(sb);
     }
 }
