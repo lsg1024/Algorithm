@@ -3,67 +3,70 @@ import java.lang.*;
 import java.io.*;
 
 class Main {
-    static int n, MIN;
-    static int[][] abilities;
-    static boolean[] visited;
+    static int n;
+    static int[][] ability;
+    static boolean[] visit;
+    static int Min = Integer.MAX_VALUE;
 
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         n = Integer.parseInt(br.readLine());
 
-        abilities = new int[n][n];
-        visited = new boolean[n];
+        ability = new int[n][n];
+        visit = new boolean[n];
         
         for (int i = 0; i < n; i++) {
             StringTokenizer st = new StringTokenizer(br.readLine());
             for (int j = 0; j < n; j++) {
-                abilities[i][j] = Integer.parseInt(st.nextToken());
+                ability[i][j] = Integer.parseInt(st.nextToken());
             }
         }
 
-        MIN = Integer.MAX_VALUE;
-
-        // 인원수 1명부터 n-1명까지 나누는 경우의 수를 모두 고려
-        for (int i = 1; i <= n - 1; i++) {
-            combi(0, 0, i);
+        for (int i = 1; i < n; i++) {
+             isCheck(0, 0, i);   
         }
-
-        System.out.println(MIN);
+        
+        System.out.println(Min);
     }
 
-    // 조합 완성된 경우
-    static void combi(int idx, int count, int target) {
-        if (count == target) {
-            diff();
+    static void isCheck(int idx, int count, int target) {
+
+        if (target == count) {
+            dfs();
             return;
         }
-
+        
         for (int i = idx; i < n; i++) {
-            if (!visited[i]) {
-                visited[i] = true;
-                combi(i + 1, count + 1, target);
-                visited[i] = false;
+            if (!visit[i]) {
+                visit[i] = true;
+                isCheck(i + 1, count + 1, target);
+                visit[i] = false;
             }
         }
     }
 
-    // 두 팀의 능력 차이를 계산하는 함수
-    static void diff() {
-        int team_start = 0;
-        int team_link = 0;
 
-        for (int i = 0; i < n; i++) {
-            for (int j = 0; j < n; j++) {
-                if (visited[i] && visited[j]) {
-                    team_start += abilities[i][j];
-                } else if (!visited[i] && !visited[j]) {
-                    team_link += abilities[i][j];
+    static void dfs() {
+        int start = 0;
+        int link = 0;
+    
+        for (int i = 0; i < n - 1; i++) {
+            for (int j = i + 1; j < n; j++) {
+                if (visit[i] && visit[j]) {
+                    start += ability[i][j] + ability[j][i];
+                }
+                else if (!visit[i] && !visit[j]){
+                    link += ability[i][j] + ability[j][i];
                 }
             }
         }
-
-        int val = Math.abs(team_start - team_link);
-
-        MIN = Math.min(val, MIN);
+        int value = Math.abs(start - link);
+    
+        if (value == 0) {
+            System.out.println(0);
+            System.exit(0);
+        }
+        
+        Min = Math.min(Min, value);
     }
 }
