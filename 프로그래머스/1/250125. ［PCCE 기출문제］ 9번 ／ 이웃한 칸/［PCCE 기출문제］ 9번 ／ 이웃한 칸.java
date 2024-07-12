@@ -32,7 +32,6 @@ class Solution {
             }
         }
         
-        
         return answer;
     }
 
