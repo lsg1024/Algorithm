@@ -8,29 +8,13 @@ class Solution {
         
         String targetColor = board[h][w];
         
-        if (h + 1 < y) {
-            if (board[h + 1][w].equals(targetColor)) {
-                answer++;
-            }
-        }
+        if (h + 1 < y && board[h + 1][w].equals(targetColor))answer++;
         
-        if (h - 1 >= 0) {
-            if (board[h - 1][w].equals(targetColor)) {
-                answer++;
-            }
-        }
+        if (h - 1 >= 0 && board[h - 1][w].equals(targetColor)) answer++;
         
-        if (w + 1 < x) {
-            if (board[h][w + 1].equals(targetColor)) {
-                answer++;
-            }
-        }
+        if (w + 1 < x && board[h][w + 1].equals(targetColor)) answer++;
         
-        if (w - 1 >= 0) {
-            if (board[h][w - 1].equals(targetColor)) {
-                answer++;
-            }
-        }
+        if (w - 1 >= 0 && board[h][w - 1].equals(targetColor)) answer++;
         
         return answer;
     }
