@@ -10,20 +10,17 @@ class Solution {
         ArrayList<Integer> arrA = div(arrayA[0]);
         ArrayList<Integer> arrB = div(arrayB[0]);
         
-        int[] listA = arrA.stream().mapToInt(i -> i).toArray();
-        int[] listB = arrB.stream().mapToInt(i -> i).toArray();
-        
         // 최대 값 구하기
-        maximum(listA, arrayA, arrayB);
-        maximum(listB, arrayB, arrayA);
+        maximum(arrA, arrayA, arrayB);
+        maximum(arrB, arrayB, arrayA);
         
         if (result.isEmpty()) return 0;
         return Collections.max(result);
     }
     
-    public void maximum(int[] list, int[] mainArr, int[] subArr) {
+    public void maximum(ArrayList<Integer> list, int[] mainArr, int[] subArr) {
         
-        for (int arr : list) {
+        for (Integer arr : list) {
             boolean v = false;
             for (int i = 0; i < mainArr.length; i++) {
                 // 배일 값 만큼 반복
