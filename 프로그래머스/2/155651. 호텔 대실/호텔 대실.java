@@ -6,11 +6,6 @@ class Solution {
     public int solution(String[][] book_time) {
         int answer = 0;
         
-        // 정렬은 시작 시간 타임으로 정렬
-        // 시간이 겹치면 방 추가
-        // 끝 시간과 겹치지 않는 시작 시간이 없으면 방 늘리기
-        // 정비 시간 10분 추가
-        
         // start, end
         sorted_Time = new int[book_time.length][2];
         
