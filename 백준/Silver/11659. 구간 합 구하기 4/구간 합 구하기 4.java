@@ -18,11 +18,7 @@ public class Main {
         
         st = new StringTokenizer(br.readLine());
         for (int i = 0; i < n; i++) {
-            nums[i] = Integer.parseInt(st.nextToken());
-        }
-
-        for (int i = 0; i < n; i++) {
-            prefix_sum[i + 1] = prefix_sum[i] + nums[i];
+            prefix_sum[i + 1] = prefix_sum[i] + Integer.parseInt(st.nextToken());
         }
         
         StringBuilder sb = new StringBuilder();
