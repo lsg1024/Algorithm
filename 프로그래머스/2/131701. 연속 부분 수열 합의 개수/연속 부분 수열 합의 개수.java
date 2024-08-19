@@ -22,7 +22,7 @@ class Solution {
                 }
                 // 원형 수열 뒷자리 
                 else {
-                    int sum = (sum_value[size] - sum_value[start]) + (sum_value[end - size]);
+                    int sum = sum_value[size] - sum_value[start] + sum_value[end - size];
                     hashset.add(sum);
                 }
             }
