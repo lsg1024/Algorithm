@@ -4,20 +4,15 @@ class Solution {
     public int solution(String[][] clothes) {
         int answer = 1;
         
-        HashMap<String, HashSet> map = new HashMap<>();
+        HashMap<String, Integer> clothesType = new HashMap<>();
         
-        for (int i = 0; i < clothes.length; i++) {
-            String item = clothes[i][0];
-            String type = clothes[i][1];
-            
-            map.putIfAbsent(type, new HashSet<String>());
-            
-            map.get(type).add(item);
+        for (String[] cloth : clothes) {
+            String type = cloth[1];
+            clothesType.put(type, clothesType.getOrDefault(type, 0) + 1);
         }
-        
-        for (String key : map.keySet()) {
-            int value = map.get(key).size();
-            answer *= (value + 1);
+    
+        for (int count : clothesType.values()) {
+            answer *= (count + 1);
         }
         
         return answer - 1;
