@@ -18,9 +18,9 @@ class Solution {
             hashmap.put(completion[i], hashmap.get(completion[i]) - 1);
         }
         
-        for (int i = 0; i < hashmap.size(); i++) {
-            if (hashmap.get(participant[i]) > 0) {
-                answer = participant[i];
+        for (String key : hashmap.keySet()) {
+            if (hashmap.get(key) != 0) {
+                answer = key;
             }
         }
         
