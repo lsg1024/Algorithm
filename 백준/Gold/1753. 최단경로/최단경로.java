@@ -58,14 +58,17 @@ class Main {
 
         dijkstra();
 
+        StringBuilder sb = new StringBuilder();
         for (int i = 1; i < V + 1; i++) {
             if (distence[i] == Integer.MAX_VALUE) {
-                System.out.println("INF");
+                sb.append("INF").append("\n");
             }
             else {
-                System.out.println(distence[i]);
+                sb.append(distence[i]).append("\n");
             }
         }
+
+        System.out.print(sb);
     }
 
     static void dijkstra() {
