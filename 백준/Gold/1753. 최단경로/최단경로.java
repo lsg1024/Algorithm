@@ -2,7 +2,7 @@ import java.util.*;
 import java.lang.*;
 import java.io.*;
 
-class Node {
+class Node implements Comparable<Node> {
 
     int index;
     int cost;
@@ -11,6 +11,12 @@ class Node {
         this.index = index;
         this.cost = cost;
     }
+
+    @Override
+    public int compareTo(Node other) {
+        return this.cost - other.cost;
+    }
+    
 }
 
 class Main {
@@ -18,7 +24,7 @@ class Main {
     static int V, E, K;
     static int[] distence;
     static ArrayList<ArrayList<Node>> graph;
-    static boolean[] visited;
+    // static boolean[] visited;
     
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
@@ -44,12 +50,10 @@ class Main {
             graph.get(a).add(new Node(b, cost));
         }
 
-        visited = new boolean[V + 1];
+        // visited = new boolean[V + 1];
         distence = new int[V + 1];
+        Arrays.fill(distence, Integer.MAX_VALUE);
 
-        for (int i = 0; i < V + 1; i++) {
-            distence[i] = Integer.MAX_VALUE;
-        }
         distence[K] = 0;
 
         dijkstra();
@@ -65,28 +69,28 @@ class Main {
     }
 
     static void dijkstra() {
-         for (int i = 0; i < V; i++) {
-            int nodeValue = Integer.MAX_VALUE;
+        PriorityQueue<Node> pq = new PriorityQueue<>();
+        pq.offer(new Node(K, 0));
 
-            int nodeIndex = 0;
+        while (!pq.isEmpty()) {
+            Node currentNode = pq.poll();
+            int current = currentNode.index;
+            int currentCost = currentNode.cost;
 
-            // 시작 인덱스는 생략하고 반복
-            for (int j = 1; j < V + 1; j++) {
-                if (distence[j] < nodeValue && !visited[j]) {
-                    nodeValue = distence[j];
-                    nodeIndex = j;
+            // 처리된 node 무시
+            if (currentCost > distence[current]) continue;
+
+            // 인접 노드 탐색저
+            for (int i = 0; i < graph.get(current).size(); i++) {
+                Node nextNode = graph.get(current).get(i);
+                int next = nextNode.index;
+                int cost = currentCost + nextNode.cost;
+
+                // 더 짧은 경로 발견시 우선순위 큐에 넣기
+                if (cost < distence[next]) {
+                    distence[next] = cost;
+                    pq.offer(new Node(next, cost));
                 }
-            }
-
-            visited[nodeIndex] = true;
-
-            for (int j = 0; j < graph.get(nodeIndex).size(); j++) {
-                Node node = graph.get(nodeIndex).get(j);
-
-                // 인접 노드가 현재 가지는 최소 비용을 비교해 적으면 해당 값으로 갱신
-                if (distence[node.index] > distence[nodeIndex] + node.cost) {
-                    distence[node.index] = distence[nodeIndex] + node.cost;
-                }   
             }
         }
     }
