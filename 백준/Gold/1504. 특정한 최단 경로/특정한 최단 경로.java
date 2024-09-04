@@ -55,9 +55,6 @@ class Main {
         st = new StringTokenizer(br.readLine());
         A = Integer.parseInt(st.nextToken());
         B = Integer.parseInt(st.nextToken());
-
-        plan_1 = 0;
-        plan_2 = 0;
         
         // A -> B
         plan_1 += dijkstra(1, A);
