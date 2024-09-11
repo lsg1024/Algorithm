@@ -48,11 +48,13 @@ class Main {
 
         Collections.sort(arr);
 
-        System.out.println(result);
+        StringBuilder sb = new StringBuilder();
+        sb.append(result).append("\n");
         for (int i = 0; i < arr.size(); i++) {
-            System.out.print(arr.get(i) + " ");
+            sb.append(arr.get(i)).append(" ");
         }
         
+        System.out.println(sb);
     }
 
     static int dfs(int y, int x) {
