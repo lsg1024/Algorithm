@@ -1,5 +1,3 @@
-import java.util.*;
-
 class Solution {
     
     static boolean[] visited;
@@ -12,30 +10,22 @@ class Solution {
         for (int i = 0; i < n; i++) {
             if (!visited[i]) {
                 answer++;
-                bfs(n, computers, i);
+                dfs(n, computers,i);
             }
         }
         
         return answer;
     }
     
-    static void bfs(int n, int[][] computers, int index) {
-        Queue<Integer> queue = new LinkedList<>();
-        queue.offer(index);
-        visited[index] = true;
+    static void dfs(int n, int[][] computers, int index) {
         
-        while (!queue.isEmpty()) {
-            int current = queue.poll();
-            
-            for (int i = 0; i < n; i++) {
-                
-                if (computers[current][i] == 1 && !visited[i]) {
-                    queue.offer(i);
-                    visited[i] = true;
-                }   
+        for (int i = 0; i < computers.length; i++) {
+            if (!visited[i] && computers[index][i] == 1) {
+                visited[index] = true;
+                dfs(n, computers, i);
             }
-            
         }
-        return;
+        
     }
+    
 }
