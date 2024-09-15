@@ -61,13 +61,13 @@ class Solution {
         int cnt = 0;
         
         for (int i = 0; i < start.length(); i++) {
-            if (start.charAt(i) != end.charAt(i)) {
+            if (start.charAt(i) == end.charAt(i)) {
                 cnt++;
             }
         }
         
-        // 중복 값이 2라면 변환 가능한 단어
-        return cnt == 1 ? true : false;
+        // 값이 1라면 변환 가능한 단어
+        return cnt == start.length() - 1 ? true : false;
     }
     
 }
