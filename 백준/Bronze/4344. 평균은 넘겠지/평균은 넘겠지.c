@@ -13,13 +13,13 @@ int main() {
             sum += num[i];
         }
 
-        float avg = (float)sum / len;  // 정수 나눗셈 대신 float로 캐스팅
+        int avg = sum / len; 
         int good = 0;
         for(int i = 0; i < len; i++) {
             if(num[i] > avg)
                 good++;
         }
-        printf("%.3f%%\n", (float)good / len * 100);  // 결과를 소수점 3자리까지 출력
+        printf("%.3f%\n", (float)good / (float) len * 100);  // 결과를 소수점 3자리까지 출력
     }
     return 0;
 }
