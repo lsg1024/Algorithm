@@ -29,9 +29,14 @@ class Solution {
             
             // lion_score가 apeach_score보다 크고 MAX_VALUE 보다 크면 갱신
             if (lion_score > apeach_score) {
-                if (lion_score - apeach_score >= MAX_SCORE) {
+                if (lion_score - apeach_score > MAX_SCORE) {
                     MAX_SCORE = lion_score - apeach_score;
                     answer = lion_info.clone();
+                } else if (lion_score - apeach_score == MAX_SCORE) {
+                    // 점수 차이가 같은 경우, 더 낮은 점수를 많이 맞힌 경우를 선택
+                    if (compareLowerScores()) {
+                        answer = lion_info.clone();
+                    }
                 }
             }
             return;
@@ -43,7 +48,14 @@ class Solution {
             dfs(info, arrows + 1, n);
             lion_info[i]--;
         }
-        
+    }
+
+    static boolean compareLowerScores() {
+        for (int i = 10; i >= 0; i--) {
+            if (lion_info[i] > answer[i]) return true; 
+            else if (lion_info[i] < answer[i]) return false; 
+        }
+        return false;
     }
     
 }
