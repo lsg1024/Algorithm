@@ -4,23 +4,20 @@ import java.io.*;
 
 class Main {
 
-    static int[] dp = new int[10000001];
+    static int[] dp = new int[1000001];
     
-    public static void main(String[] args) {
-        Scanner sc = new Scanner(System.in);
+    public static void main(String[] args) throws IOException {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 
-        int n = sc.nextInt();
+        int N = Integer.parseInt(br.readLine());
 
+        Arrays.fill(dp, -1);        
+        
         dp[0] = 0;
         dp[1] = 1;
         dp[2] = 2;
 
-        for (int i = 3; i < dp.length; i++) {
-            dp[i] = -1;
-        }
-
-        System.out.print(func(n));
-        
+        System.out.println(func(N));
     }
 
     static int func(int n) {
