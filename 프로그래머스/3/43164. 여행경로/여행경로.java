@@ -1,43 +1,29 @@
 import java.util.*;
 
 class Solution {
-    
-    static boolean[] visited;
-    static ArrayList<String> airport = new ArrayList<>();
-    
+    private Map<String, PriorityQueue<String>> graph = new HashMap<>();
+    private LinkedList<String> path = new LinkedList<>();
+
     public String[] solution(String[][] tickets) {
-        
-        visited = new boolean[tickets.length];
-        
-        // start, path, cnt, tickets
-        dfs("ICN", "ICN", 0, tickets);
-        
-        Collections.sort(airport);
-        
-        String[] first_line = airport.get(0).split(" ");
-
-        String[] air_line = first_line[0].split(",");
-        
-        return first_line[0].split(",");
-    }
-    
-    static void dfs(String start, String path, int cnt, String[][] tickets) {
-        
-        if (cnt == tickets.length) {
-            airport.add(path);
-            return;
+        // 그래프 구축: 각 출발지에서 도착지를 알파벳 순으로 정렬된 우선순위 큐에 저장
+        for (String[] ticket : tickets) {
+            graph.computeIfAbsent(ticket[0], k -> new PriorityQueue<>()).add(ticket[1]);
         }
-        
 
-        for (int i = 0; i < tickets.length; i++) {
-            if (!visited[i] && start.equals(tickets[i][0])) {
-                visited[i] = true;
-                dfs(tickets[i][1], path + "," + tickets[i][1], cnt + 1, tickets);
-                visited[i] = false;
-            }
+        // "ICN"에서 출발하여 경로 탐색
+        dfs("ICN");
 
-        }
-        
+        // LinkedList를 배열로 변환하여 반환
+        return path.toArray(new String[0]);
     }
-    
+
+    private void dfs(String current) {
+        PriorityQueue<String> destinations = graph.get(current);
+        while (destinations != null && !destinations.isEmpty()) {
+            String next = destinations.poll();
+            dfs(next);
+        }
+        // 모든 경로를 탐색한 후 경로에 추가
+        path.addFirst(current);
+    }
 }
