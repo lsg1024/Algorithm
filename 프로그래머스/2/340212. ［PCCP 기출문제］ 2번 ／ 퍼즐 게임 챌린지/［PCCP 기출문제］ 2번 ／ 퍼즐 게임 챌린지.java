@@ -1,9 +1,9 @@
 class Solution {
     public int solution(int[] diffs, int[] times, long limit) {
-        int answer;
+        int answer = 0;
         
-        int right = 0;
         int left = 1;
+        int right = 0;
         
         for (int diff : diffs) {
             if (diff > right) {
@@ -13,11 +13,9 @@ class Solution {
         
         answer = right;
         
-        
         while (left <= right) {
-            
-            int mid = (right + left) / 2;
-            long total_time = dfs(mid, diffs, times, limit);
+            int mid = (left + right) / 2;
+            long total_time = binarySearch(mid, diffs, times, limit);
             
             if (total_time <= limit) {
                 answer = mid;
@@ -26,33 +24,34 @@ class Solution {
             else {
                 left = mid + 1;
             }
-    
-        }    
+        }
         
         return answer;
     }
     
-    static long dfs(int level, int[] diffs, int[] times, long limit) {
+    static long binarySearch(int mid, int[] diffs, int[] times, long limit) {
         
-        long result = 0L;
+        long total_time = 0;
         for (int i = 0; i < diffs.length; i++) {
-            if (diffs[i] <= level) {
-                result += times[i];
+            if (mid >= diffs[i]) {
+                total_time += times[i];
             }
             else {
+                int again = diffs[i] - mid;
                 if (i == 0) {
-                    result += times[i] * (diffs[i] - level) + times[i];
-                } else {
-                    result += (times[i] + times[i - 1]) * (diffs[i] - level) + times[i];
+                    total_time += again * times[i] + times[i];
+                }
+                else {
+                    total_time += again * (times[i] + times[i - 1]) + times[i];
                 }
             }
             
-            if (result > limit) {
+            if (total_time > limit) {
                 break;
             }
         }
         
-        return result;
+        return total_time;
+        
     }
-    
 }
