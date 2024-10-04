@@ -1,13 +1,10 @@
 class Solution {
     
     static int[] result = new int[2];
-    static boolean[][] visited;
     
     public int[] solution(int[][] arr) {
         
         int size = arr.length;
-        
-        visited = new boolean[size][size];
         
         //영역별 분할 탐색 dfs
         dfs(0, 0, size, arr);
@@ -16,19 +13,9 @@ class Solution {
     }
     
     static void dfs(int x, int y, int size, int[][] arr) {
-        
-        if (visited[x][y]) {
-            return;
-        }
             
         if (isCheck(x, y, size, arr)) {
             result[arr[x][y]] += 1;
-            
-            for (int i = x; i < size; i++) {
-                for (int j = y; j < size; j++) {
-                    visited[i][j] = true;
-                }
-            }
             
             return;
         }
