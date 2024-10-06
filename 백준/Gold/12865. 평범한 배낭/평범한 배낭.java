@@ -13,40 +13,31 @@ class Main {
         N = Integer.parseInt(st.nextToken());
         K = Integer.parseInt(st.nextToken());
 
-        items = new int[N][2];
+        items = new int[N + 1][2];
 
-        for (int i = 0; i < N; i++) {
+        for (int i = 1; i < N + 1; i++) {
             st = new StringTokenizer(br.readLine());
             items[i][0] = Integer.parseInt(st.nextToken());
             items[i][1] = Integer.parseInt(st.nextToken());
         }
 
-        Arrays.sort(items, (o1, o2) -> {
-            return o1[0] - o2[0];
-        });
+        dp = new int[N + 1][K + 1];
 
-        dp = new int[N][K + 1];
+        // i = 반복할 배낭 수 j = 물건 1 ~ K까지 무게 측정
+        for (int i = 1; i < N + 1; i++) {
+            for (int j = 1; j < K + 1; j++) {
 
-        System.out.println(knapsack(N - 1, K));
-
-    }
-
-    static int knapsack(int i, int k) {
-        
-        if (i < 0) {
-            return 0;
-        } 
-
-        if (dp[i][k] == 0) {
-           if (items[i][0] > k) {
-            dp[i][k] = knapsack(i - 1, k);
-            } else {
-                dp[i][k] = Math.max(knapsack(i - 1, k), knapsack(i - 1, k - items[i][0]) + items[i][1]);
-            } 
+                if (items[i][0] > j) {
+                    dp[i][j] = dp[i - 1][j];
+                } else {
+                    dp[i][j] = Math.max(dp[i - 1][j], dp[i - 1][j - items[i][0]] + items[i][1]);
+                }
+                
+            }
         }
 
-        return dp[i][k];
-        
+        System.out.println(dp[N][K]);
+
     }
     
 }
