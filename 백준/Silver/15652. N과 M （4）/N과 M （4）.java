@@ -4,38 +4,45 @@ import java.io.*;
 
 class Main {
 
-    static int n, m;
-    static int[] value;
-    static StringBuilder sb = new StringBuilder();
+    static int N, M;
+    static int[] list;
+    static boolean[] visited;
+    static StringBuilder sb;
     
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) throws Exception {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         StringTokenizer st = new StringTokenizer(br.readLine());
 
-        n = Integer.parseInt(st.nextToken());
-        m = Integer.parseInt(st.nextToken());
+        N = Integer.parseInt(st.nextToken());
+        M = Integer.parseInt(st.nextToken());
 
-        value = new int[m];
-        
-        dfs(1, 0);
+        list = new int[M];
+        visited = new boolean[N];
+
+        sb = new StringBuilder();
+        backtrack(1, 0);
+
         System.out.println(sb);
+        
     }
 
-    static void dfs(int num, int dp) {
+    static void backtrack(int index, int depth) {
 
-        if (dp == m) {
-            for (int val : value) {
-                sb.append(val).append(" ");
+        if (depth == M) {
+            for (int l : list) {
+                sb.append(l).append(" ");
             }
             sb.append("\n");
             return;
         }
 
-        for (int i = num; i <= n; i++) {
-                value[dp] = i;
-                dfs(num++, dp + 1);
-
-        } 
+        for (int i = index; i <= N; i++) {
+            
+            list[depth] = i;
+            backtrack(i, depth + 1);
+            
+        }
         
     }
+    
 }
