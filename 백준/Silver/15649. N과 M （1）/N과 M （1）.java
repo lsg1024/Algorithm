@@ -1,43 +1,52 @@
 import java.util.*;
+import java.lang.*;
 import java.io.*;
 
-public class Main {
+class Main {
+
+    static int N, M;
+    static int[] list;
+    static boolean[] visited;
+    static StringBuilder sb;
     
-    public static int n, m;
-    public static int[] nums;
-    public static boolean[] visited;
-    
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) throws Exception {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         StringTokenizer st = new StringTokenizer(br.readLine());
+
+        N = Integer.parseInt(st.nextToken());
+        M = Integer.parseInt(st.nextToken());
+
+        list = new int[M];
+        visited = new boolean[N];
+
+        sb = new StringBuilder();
+        backtrack(0);
+
+        System.out.println(sb);
         
-        n = Integer.parseInt(st.nextToken()); // 4
-        m = Integer.parseInt(st.nextToken()); // 2
-        
-        nums = new int[m];
-        visited = new boolean[n];
-        
-        bfs(n, 0);
-    
     }
-    
-    public static void bfs(int n, int count) {
-        if (count == m) {
-            for (int num : nums) {
-                System.out.print(num + " ");
+
+    static void backtrack(int depth) {
+
+        if (depth == M) {
+            for (int l : list) {
+                sb.append(l).append(" ");
             }
-            System.out.println();
+            sb.append("\n");
             return;
         }
-        
-        for (int i = 0; i < n; i++) {
+
+        for (int i = 0; i < N; i++) {
+            
             if (!visited[i]) {
                 visited[i] = true;
-                nums[count] = i + 1;
-                bfs(n, count + 1);
+                list[depth] = i + 1;
+                backtrack(depth + 1);
                 visited[i] = false;
             }
+            
         }
+        
     }
+    
 }
-
