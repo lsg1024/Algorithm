@@ -3,10 +3,11 @@ import java.util.*;
 class Solution {
     public String solution(int n, int t, int m, int p) {
         String answer = "";
-        String words = "";
+
+        StringBuilder words = new StringBuilder();
 
         for (int i = 0; i < t * m; i++) {
-            words += Integer.toString(i, n);
+            words.append(Integer.toString(i, n));
         }
     
         for (int i = p - 1; i < t * m; i += m) {
