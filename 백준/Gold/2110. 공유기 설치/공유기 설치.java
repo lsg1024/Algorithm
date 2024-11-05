@@ -3,54 +3,60 @@ import java.lang.*;
 import java.io.*;
 
 class Main {
-    static int n, c;
+
+    static int N, C;
     static int[] houses;
+    
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         StringTokenizer st = new StringTokenizer(br.readLine());
 
-        n = Integer.parseInt(st.nextToken());
-        c = Integer.parseInt(st.nextToken());
+        N = Integer.parseInt(st.nextToken());
+        C = Integer.parseInt(st.nextToken());
 
-        houses = new int[n];
+        houses = new int[N];
 
-        for (int i = 0; i < n; i++) {
+        for (int i = 0; i < N; i++) {
             houses[i] = Integer.parseInt(br.readLine());
         }
 
         Arrays.sort(houses);
 
-        int low = 1;
-        int high = houses[n - 1] - houses[0];
+        long low = 1;
+        long high = houses[N - 1] - houses[0];
         int best = 0;
 
         while (low <= high) {
-            int mid = (low + high) / 2;
-            
-            if (canRouting(mid)) {
+
+            int mid = (int) (low + high) / 2;
+
+            if (canRoutes(mid)) {
                 best = mid;
                 low = mid + 1;
-            }
-            else {
+            } else {
                 high = mid - 1;
             }
         }
-        System.out.println(best);
+
+        System.out.print(best);
+        
     }
 
-    static boolean canRouting(int rounting) {
+    static boolean canRoutes(int distance) {
         int count = 1;
         int firsthouse = houses[0];
-        
-        for (int i = 1; i < n; i++) {
-            if (houses[i] - firsthouse >= rounting) {
+
+        for (int i = 0; i < N; i++) {
+            if (houses[i] - firsthouse >= distance) {
                 count++;
                 firsthouse = houses[i];
-                if (count >= c) {
-                    return true;
-                }
+            }
+
+            if (count == C) {
+                return true;
             }
         }
+
         return false;
     }
 }
