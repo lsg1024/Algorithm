@@ -1,59 +1,70 @@
 import java.util.*;
+import java.lang.*;
 import java.io.*;
 
 class Main {
-    static int n;
-    static int[][] arr;
-    static int[] total;
 
+    static int N;
+    static int[] result;
+    static int[][] graph;
+    
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        StringTokenizer st = new StringTokenizer(br.readLine());
 
-        n = Integer.parseInt(br.readLine());
+        N = Integer.parseInt(st.nextToken());
+        
+        result = new int[2];
+        graph = new int[N][N];
 
-        arr = new int[n][n];
-        total = new int[2];
-
-        for (int i = 0; i < n; i++) {
-            StringTokenizer st = new StringTokenizer(br.readLine());
-            for (int j = 0; j < n; j++) {
-                arr[i][j] = Integer.parseInt(st.nextToken());
+        for (int i = 0; i < N; i++) {
+            st = new StringTokenizer(br.readLine());
+            for (int j = 0; j < N; j++) {
+                graph[i][j] = Integer.parseInt(st.nextToken());
             }
         }
 
-        BlueAndWhite(0, n - 1, 0, n - 1);
+        // 분할탐색
+        func_1(0, 0, N);
 
-        for (int i = 0; i < 2; i++) {
-            System.out.println(total[i]);
+        for (int num : result) {
+            System.out.println(num);
         }
-    }
-
-    static void BlueAndWhite(int x_s, int x_e, int y_s, int y_e) {
         
-        if (checkColor(x_s, x_e, y_s, y_e)) {
-            int value = arr[y_s][x_s];
-            total[value]++;
-            return;
-        }
-
-        int midX = (x_s + x_e) / 2;
-        int midY = (y_s + y_e) / 2;
-
-        BlueAndWhite(x_s, midX, y_s, midY); 
-        BlueAndWhite(midX + 1, x_e, y_s, midY); 
-        BlueAndWhite(x_s, midX, midY + 1, y_e); 
-        BlueAndWhite(midX + 1, x_e, midY + 1, y_e);
     }
 
-    static boolean checkColor(int x_s, int x_e, int y_s, int y_e) {
-        int color = arr[y_s][x_s];
-        for (int i = y_s; i <= y_e; i++) {
-            for (int j = x_s; j <= x_e; j++) {
-                if (arr[i][j] != color) {
+    static void func_1(int x, int y, int size) {
+
+        if (func_2(x, y, size)) {
+            int target = graph[x][y];
+            result[target]++;
+            return;
+        } else {
+            // 사분면 위치에서 false가 나온 경우 즉 일치 하지 않은 경우
+            size /= 2;
+            
+            func_1(x, y, size);
+            func_1(x + size, y, size);
+            func_1(x, y + size, size);
+            func_1(x + size, y + size, size);
+        }
+        
+    }
+
+    static boolean func_2(int x, int y, int size) {
+
+        int target = graph[x][y];
+
+        for (int i = x; i < x + size; i++) {
+            for (int j = y; j < y + size; j++) {
+                if (target != graph[i][j]) {
                     return false;
                 }
             }
         }
+
         return true;
+        
     }
+    
 }
