@@ -11,10 +11,9 @@ class Solution {
         int size = n;
         answer = new int[n];
         
-        for (int i = 0; i < size; i++) {
+        for (int i = 0; i < size; n--, i++) {
             int value = s / n;
             answer[i] = value;
-            n--;
             s -= value;
         }
         
