@@ -1,0 +1,32 @@
+-- 코드를 입력하세요
+SELECT
+    DATE_FORMAT(SALES_DATE, '%Y-%m-%d') AS SALES_DATE,
+    PRODUCT_ID,
+    USER_ID,
+    SALES_AMOUNT
+FROM (
+    SELECT 
+        OS.SALES_DATE,
+        OS.PRODUCT_ID,
+        OS.USER_ID,
+        OS.SALES_AMOUNT
+    FROM
+        ONLINE_SALE OS
+    WHERE
+        DATE_FORMAT(OS.SALES_DATE, '%Y-%m') = '2022-03'
+    UNION ALL
+    
+    SELECT
+        OFF.SALES_DATE,
+        OFF.PRODUCT_ID,
+        NULL AS USER_ID,
+        OFF.SALES_AMOUNT
+    FROM
+        OFFLINE_SALE OFF
+    WHERE
+        DATE_FORMAT(OFF.SALES_DATE, '%Y-%m') = '2022-03'
+) AS DATA_TABLE
+ORDER BY
+    SALES_DATE ASC,
+    PRODUCT_ID ASC,
+    USER_ID ASC;
