@@ -1,70 +1,54 @@
 import java.util.*;
 
 class Solution {
-    
-    static int START_TIME = 540;
-    
+    static final int INITIAL_START_TIME = 540; // 09:00
+    static int START_TIME;
+
     public String solution(int n, int t, int m, String[] timetable) {
+        START_TIME = INITIAL_START_TIME;
         String answer = "";
-        
-        int total = n * m;
-        int bf_take = 0;
-        ArrayList<Integer> arr = new ArrayList<>();
+
+        // 시간표를 분 단위로 변환하고 정렬
+        List<Integer> arr = new ArrayList<>();
         for (String times : timetable) {
             String[] time = times.split(":");
-            int hour = Integer.parseInt(time[0]) * 60;
-            int minute = Integer.parseInt(time[1]);
-            
-            if (hour + minute < START_TIME) {
-                bf_take++;
-            }
-            arr.add(hour + minute);
+            int minutes = Integer.parseInt(time[0]) * 60 + Integer.parseInt(time[1]);
+            arr.add(minutes);
         }
-        
-       Collections.sort(arr);
-        
-        if (bf_take != 0) {
-            if (bf_take >= total) {
-                START_TIME = arr.get(arr.size() - 1) - 1;
-                answer = String.format("%02d:%02d", START_TIME / 60, START_TIME % 60);
-            } else if (bf_take < total) {
-                answer = String.format("%02d:%02d", START_TIME / 60, START_TIME % 60);
-            } else {
-                n -= 1;
-            }
-        }
-        
+        Collections.sort(arr);
+
+        // 셔틀 운행 시작
         for (int i = 0; i < n; i++) {
-        
-            int can_move = m;
-            int last = 0;
-            
-            while (can_move > 0 && arr.size() > 0) {
-                
-                int time = arr.get(0);   
-                
-                if (time <= START_TIME) {
-                    last = time;
-                    arr.remove(0);
-                    can_move--;
-                } else {
-                    break;
-                }
-                
+            int canMove = m; // 셔틀당 최대 탑승 인원
+            int lastBoardingTime = -1; // 마지막 탑승 시간 기록
+
+            // 현재 셔틀에 탑승 가능한 승객 처리
+            while (canMove > 0 && !arr.isEmpty() && arr.get(0) <= START_TIME) {
+                lastBoardingTime = arr.remove(0);
+                canMove--;
             }
-              
+
+            // 마지막 셔틀 처리
             if (i == n - 1) {
-                if (can_move > 0) {
-                    answer = String.format("%02d:%02d", START_TIME / 60, START_TIME % 60);
+                if (canMove > 0) {
+                    // 자리가 남는 경우, 셔틀 도착 시간 반환
+                    answer = formatTime(START_TIME);
                 } else {
-                    last -= 1;
-                    answer = String.format("%02d:%02d", last / 60, last % 60);
+                    // 자리가 없는 경우, 마지막 탑승 가능 시간보다 1분 일찍 도착
+                    answer = formatTime(lastBoardingTime - 1);
                 }
+                break;
             }
-            
+
+            // 다음 셔틀 시간 갱신
             START_TIME += t;
         }
-        
+
         return answer;
+    }
+
+    // 시간을 "HH:MM" 형식의 문자열로 변환
+    private String formatTime(int time) {
+        return String.format("%02d:%02d", time / 60, time % 60);
     }
 }
