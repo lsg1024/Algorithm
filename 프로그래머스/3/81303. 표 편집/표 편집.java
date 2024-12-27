@@ -2,36 +2,43 @@ import java.util.*;
 
 class Solution {
     public String solution(int n, int k, String[] cmd) {
+        String answer = "";
         
-        int table_size = n;
+        int size = n;
+        int position = k;
+        
         Stack<Integer> deleted = new Stack<>();
-
+    
+        String type;
+        int move = 0;
         for (String c : cmd) {
             String[] orders = c.split(" ");
-            String type = orders[0];
+            type = orders[0];
 
             if (type.equals("D")) {
-                k += Integer.parseInt(orders[1]);
+                position += Integer.parseInt(orders[1]);   
             } else if (type.equals("U")) {
-                k -= Integer.parseInt(orders[1]);
+                position -= Integer.parseInt(orders[1]);   
             } else if (type.equals("C")) {
-                deleted.add(k);
-                table_size--;
-                if (k == table_size) k--;
+                deleted.push(position);
+                size--;
+                if (size == position) {
+                    position--;
+                }
             } else if (type.equals("Z")) {
-                if (deleted.pop() <= k) k++;
-                table_size++;
+                if (deleted.pop() <= position) position++;
+                size++;
             }
         }
-
+        
         StringBuilder sb = new StringBuilder();
-        for (int i = 0; i < table_size; i++) {
+        for (int i = 0; i < size; i++) {
             sb.append("O");
         }
-        while(!deleted.isEmpty()) {
+        while (!deleted.isEmpty()) {
             sb.insert(deleted.pop().intValue(), "X");
         }
-        
+
         return sb.toString();
     }
 }
