@@ -4,8 +4,7 @@ class Solution {
         int length = (int) (end - begin + 1);
         int[] answer = new int[length];
         
-        int index = 0;
-        for (int i = (int) begin; i <= (int) end; i++) {
+        for (int i = (int) begin, index = 0; i <= (int) end; i++) {
             answer[index++] = getSmallestBlock(i);
         }
         
