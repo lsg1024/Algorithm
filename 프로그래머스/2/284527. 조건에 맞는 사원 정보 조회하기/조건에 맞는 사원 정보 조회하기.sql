@@ -1,20 +1,18 @@
+WITH RankedEmployees AS (
+    SELECT 
+        HG.EMP_NO, 
+        SUM(HG.SCORE) AS TOTAL_SCORE, 
+        RANK() OVER (ORDER BY SUM(HG.SCORE) DESC) AS RANKING
+    FROM HR_GRADE HG
+    GROUP BY HG.EMP_NO
+)
 SELECT 
-    HG.SCORE,
-    HG.EMP_NO,
+    RE.TOTAL_SCORE AS SCORE,
+    RE.EMP_NO,
     HE.EMP_NAME,
     HE.POSITION,
     HE.EMAIL
-FROM (
-    SELECT 
-        EMP_NO, 
-        SUM(SCORE) AS SCORE 
-    FROM HR_GRADE 
-    GROUP BY 
-        EMP_NO
-    ORDER BY 
-        SCORE DESC
-    LIMIT 1
-) HG
+FROM RankedEmployees RE
 JOIN HR_EMPLOYEES HE
-    ON HE.EMP_NO = HG.EMP_NO
-
+    ON HE.EMP_NO = RE.EMP_NO
+WHERE RE.RANKING = 1;
