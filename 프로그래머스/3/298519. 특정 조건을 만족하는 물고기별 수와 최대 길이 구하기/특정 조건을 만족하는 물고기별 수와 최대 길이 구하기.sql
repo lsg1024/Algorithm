@@ -1,0 +1,21 @@
+WITH FISH AS (
+    SELECT 
+        FISH_TYPE, 
+        COUNT(FISH_TYPE) AS FISH_COUNT, 
+        SUM(LENGTH) AS SUM,
+        MAX(LENGTH) AS MAX_LENGTH
+    FROM 
+        FISH_INFO
+    GROUP BY 
+        FISH_TYPE
+    ORDER BY 
+        FISH_TYPE ASC
+)
+SELECT 
+    F.FISH_COUNT,
+    F.MAX_LENGTH,
+    F.FISH_TYPE
+FROM
+    FISH F
+WHERE
+    F.SUM / F.FISH_COUNT >= 33
