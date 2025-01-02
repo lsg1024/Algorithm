@@ -1,0 +1,13 @@
+SELECT
+    ROUND(AVG(FISH.TOTAL), 2) AS AVERAGE_LENGTH
+FROM (
+    SELECT 
+        SUM(IFNULL(LENGTH, 10)) AS TOTAL
+    FROM 
+        FISH_INFO
+     GROUP BY
+        ID
+) FISH
+
+ 
+
