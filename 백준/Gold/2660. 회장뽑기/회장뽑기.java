@@ -4,20 +4,26 @@ import java.io.*;
 
 class Main {
 
-    static final int INF = 100_000;
-    
-    static int N;
-    static int[][] graph;
+    static class Node {
+        int node;
+        int cost;
+
+        public Node (int node, int cost) {
+            this.node = node;
+            this.cost = cost;
+        }
+    }
+
+    static int N, historyMaxScore;
+    static ArrayList<ArrayList<Node>> graph = new ArrayList<>();
     
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 
         N = Integer.parseInt(br.readLine());
-        graph = new int[N + 1][N + 1];
 
         for (int i = 0; i < N + 1; i++) {
-            Arrays.fill(graph[i], INF);
-            graph[i][i] = 0;
+            graph.add(new ArrayList<>());
         }
 
         StringTokenizer st;
@@ -29,42 +35,67 @@ class Main {
 
             if (x == -1 && y == -1) break;
 
-            graph[x][y] = 1;
-            graph[y][x] = 1;
+            graph.get(x).add(new Node(y, 1));
+            graph.get(y).add(new Node(x, 1));
         }
 
-        for (int k = 1; k < N + 1; k++) {
-            for (int i = 1; i < N + 1; i++) {
-                for (int j = 1; j < N + 1; j++) {
-                    graph[i][j] = Math.min(graph[i][j], graph[i][k] + graph[k][j]);
+        historyMaxScore = Integer.MAX_VALUE;
+        List<Integer> arr = new ArrayList<>();
+        for (int i = 1; i < N + 1; i++) {
+            int score = dijkstra(i);
+
+            if (score == historyMaxScore) {
+                arr.add(i);
+            } else if (historyMaxScore > score) {
+                historyMaxScore = score;
+                arr = new ArrayList<>();
+                arr.add(i);
+            }
+        }
+
+        System.out.println(historyMaxScore + " " + arr.size());
+        for (int i = 0; i < arr.size(); i++) {
+            System.out.print(arr.get(i) + " ");
+        }
+        
+    }
+
+    static int dijkstra(int start) {
+        PriorityQueue<Node> pq = new PriorityQueue<>((o1, o2) -> {
+            return o1.cost - o2.cost;
+        });
+
+        pq.offer(new Node(start, 0));
+        boolean[] visited = new boolean[N + 1];
+        int[] dist = new int[N + 1];
+        Arrays.fill(dist, Integer.MAX_VALUE);
+        dist[start] = 0;
+
+        while (!pq.isEmpty()) {
+            Node current = pq.poll();
+            int node = current.node;
+            int cost = current.cost;
+
+            if (visited[node]) continue;
+            visited[node] = true;
+
+            for (Node next : graph.get(node)) {
+                int next_node = next.node;
+                int next_cost = next.cost + cost;
+
+                if (!visited[next_node] && dist[next_node] > next_cost) {
+                    dist[next_node] = next_cost;
+                    pq.offer(new Node(next_node, next_cost));
                 }
             }
         }
 
-        int[] scores = new int[N + 1];
-        int minScore = INF;
-
-        for (int i = 1; i < N + 1; i++) {
-            int maxDist = 0;
-            for (int j = 1; j < N + 1; j++) {
-                maxDist = Math.max(maxDist, graph[i][j]);
-            }
-            scores[i] = maxDist;
-            minScore = Math.min(minScore, maxDist);
+        int maxScore = 0;
+        for (int d : dist) {
+            if (d == Integer.MAX_VALUE) continue;
+            maxScore = Math.max(maxScore, d);
         }
 
-        int count = 0;
-        StringBuilder sb = new StringBuilder();
-        for (int i = 1; i < N + 1; i++) {
-            if (minScore == scores[i]) {
-                count++;
-                sb.append(i).append(" ");
-            }
-        }
-
-        System.out.println(minScore + " " + count);
-        System.out.println(sb);
-        
+        return maxScore;
     }
-    
 }
