@@ -10,10 +10,9 @@ class Main {
 
         int T = Integer.parseInt(br.readLine());
 
-        StringTokenizer st;
         for (int i = 0; i < T; i++) {
             int N = Integer.parseInt(br.readLine());
-            st = new StringTokenizer(br.readLine());
+            StringTokenizer st = new StringTokenizer(br.readLine());
 
             if (N >= 33) {
                 System.out.println(0);
