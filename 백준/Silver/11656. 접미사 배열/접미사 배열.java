@@ -14,8 +14,10 @@ class Main {
 
         Arrays.sort(names);
 
+        StringBuilder sb = new StringBuilder();
         for (String name : names) {
-            System.out.println(name);
+            sb.append(name).append("\n");
         }
+        System.out.println(sb);
     }
 }
