@@ -3,33 +3,36 @@ import java.lang.*;
 import java.io.*;
 
 class Main {
+    
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        int n = Integer.parseInt(br.readLine());
 
-        int[] score = new int[n];
-        int[] dp = new int[n];
+        int N = Integer.parseInt(br.readLine());
 
-        for (int i = 0; i < n; i++) {
-            score[i] = Integer.parseInt(br.readLine());
+        int[] floors = new int[N + 1];
+        int[] dp = new int[N + 1];
+
+        for (int i = 1; i < N + 1; i++) {
+            floors[i] = Integer.parseInt(br.readLine());
         }
 
-        if (n == 1) {
-            System.out.println(score[0]);
+        if (N == 1) {
+            System.out.println(floors[1]);
             return;
-        } else if (n == 2) {
-            System.out.println(score[0] + score[1]);
+        } else if (N == 2) {
+            System.out.println(floors[1] + floors[2]);
             return;
         }
 
-        dp[0] = score[0];
-        dp[1] = score[0] + score[1];
-        dp[2] = Math.max(score[0] + score[2], score[1] + score[2]);
-
-        for (int i = 3; i < n; i++) {
-            dp[i] = Math.max(dp[i - 2] + score[i], dp[i - 3] + score[i - 1] + score[i]);
+        dp[1] = floors[1];
+        dp[2] = dp[1] + floors[2];
+        dp[3] = Math.max(floors[1] + floors[3], floors[2] + floors[3]);
+        
+        for (int i = 4; i < N + 1; i++) {
+            dp[i] = Math.max(dp[i - 2] + floors[i], dp[i - 3] + floors[i - 1] + floors[i]);
         }
 
-        System.out.println(dp[n - 1]);
+        System.out.println(dp[N]);
+        
     }
 }
