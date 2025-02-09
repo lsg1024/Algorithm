@@ -10,6 +10,7 @@ class Main {
 
         int[] arr;
         StringTokenizer st;
+        StringBuilder sb = new StringBuilder();
         for (int t = 0; t < T; t++) {
             int N = Integer.parseInt(br.readLine());
             arr = new int[N];
@@ -46,7 +47,8 @@ class Main {
             for (int i = 0; i < trees.length - 1; i++) {
                 min = Math.max(min, Math.abs(trees[i] - trees[i + 1]));
             }
-            System.out.println(min);
+            sb.append(min).append("\n");
         }
+        System.out.println(sb);
     }
 }
