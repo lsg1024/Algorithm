@@ -1,27 +1,28 @@
-SELECT
-    CASE 
-        WHEN GROUP_CONCAT(S.NAME) LIKE ('%Python%') AND GROUP_CONCAT(S.CATEGORY) LIKE ("%Front%") THEN "A"
-        WHEN GROUP_CONCAT(S.NAME) LIKE ('%C#%') THEN "B"
-        WHEN GROUP_CONCAT(S.CATEGORY) LIKE ('%Front%') THEN "C"
+-- 코드를 작성해주세요
+WITH T1 AS (
+    SELECT
+        SUM(CODE) AS CODE
+    FROM
+        SKILLCODES
+    WHERE CATEGORY = 'Front End'
+)
+
+SELECT 
+    T2.*
+FROM (
+    SELECT 
+        CASE
+            WHEN (SKILL_CODE & (SELECT CODE FROM T1)) > 0 AND (SKILL_CODE & (SELECT CODE FROM SKILLCODES WHERE NAME = 'Python')) > 0 THEN 'A'
+            WHEN (SKILL_CODE & (SELECT CODE FROM SKILLCODES WHERE NAME = 'C#')) > 0 THEN 'B'
+            WHEN (SKILL_CODE & (SELECT CODE FROM T1)) > 0 THEN 'C'
+            ELSE NULL
         END AS GRADE,
-    D.ID,
-    D.EMAIL
-FROM 
-    DEVELOPERS AS D
-JOIN 
-    SKILLCODES AS S
-ON 
-    (D.SKILL_CODE & S.CODE = S.CODE)
-GROUP BY
-    D.ID,
-    D.EMAIL
-HAVING
-    GRADE IS NOT NULL
-ORDER BY
-    GRADE ASC,
-    D.ID ASC;
-
-
-    
-
-    
+        ID,
+        EMAIL
+    FROM 
+        DEVELOPERS
+    ORDER BY
+        GRADE,
+        ID
+) T2
+WHERE T2.GRADE IS NOT NULL
