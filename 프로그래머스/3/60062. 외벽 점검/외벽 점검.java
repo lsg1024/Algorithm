@@ -2,13 +2,11 @@ import java.util.*;
 
 class Solution {
     
-    int n, answer;
-    int[] weak, dist, weak_point;
+    int answer;
+    int[] dist, weak_point;
     
     public int solution(int n, int[] weak, int[] dist) {
         answer = Integer.MAX_VALUE;
-        this.n = n;
-        this.weak = weak;
         this.dist = dist;
         
         int len = weak.length;
@@ -39,7 +37,7 @@ class Solution {
             return;
         }
         
-        for (int i = dist.length - 1; i >= 0; i--) {
+        for (int i = 0; i < dist.length; i++) {
             if (!visited[i]) {
                 visited[i] = true;
                 history[count] = dist[i]; 
