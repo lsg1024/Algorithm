@@ -7,16 +7,6 @@ class Solution {
         int col = board.length;
         int row = board[0].length;
         
-        if (col == 1 || row == 1) {
-            for (int i = 0; i < col; i++) {
-                for (int j = 0; j < row; j++) {
-                    if (board[i][j] == 1) {
-                        return 1;
-                    }
-                }
-            }
-        }
-        
         int[][] dp = new int[col][row];
         
         for (int i = 0; i < col; i++) {
@@ -26,9 +16,9 @@ class Solution {
                         dp[i][j] = board[i][j];
                     } else {
                         dp[i][j] = Math.min(dp[i - 1][j], Math.min(dp[i][j - 1], dp[i - 1][j - 1])) + 1;
-                        answer = Math.max(answer, dp[i][j]);
                     }
                 }
+                answer = Math.max(answer, dp[i][j]);
             }
         }
         
