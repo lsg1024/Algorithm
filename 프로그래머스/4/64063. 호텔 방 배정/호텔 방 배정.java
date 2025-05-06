@@ -19,13 +19,11 @@ class Solution {
         if (!room.containsKey(room_number)) {
             room.put(room_number, room_number + 1);
             return room_number;
+        } else {
+            long empty_room = find(room.get(room_number));
+            room.put(room_number, empty_room);
+            return empty_room;
         }
-        
-        long next_room_number = room.get(room_number);
-        long empty_room_number = find(next_room_number);
-        room.put(room_number, empty_room_number);
-        return empty_room_number;
-        
     }
     
 }
