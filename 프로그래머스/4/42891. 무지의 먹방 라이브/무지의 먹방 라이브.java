@@ -1,54 +1,53 @@
 import java.util.*;
 
 class Food {
-    
     int time;
     int index;
-    
-    public Food(int time, int index) {
+
+    Food(int time, int index) {
         this.time = time;
         this.index = index;
     }
-    
 }
 
 class Solution {
-    public int solution(int[] food_times, long k) {
-        int answer = 0;
-        long sum = 0;
-        int n = food_times.length;
-        
-        PriorityQueue<Food> pq = new PriorityQueue<>((o1, o2) -> {
-            return o1.time - o2.time;
-        });
-        
-        for (int i = 0; i < n; i++) {
-            pq.offer(new Food(food_times[i], i + 1));
-        }
-        
-        long previous = 0;
-        long length = n;
-        
-        while (!pq.isEmpty()) {
-            long now = pq.peek().time; 
-            long diff = now - previous; 
-            long spend = diff * length; 
-            
-            if (k < spend) break; 
-            
-            k -= spend; 
 
-            previous = now;
-            
-            pq.poll();
-            length--;
+    public int solution(int[] food_times, long k) {
+        int n = food_times.length;
+        long left = 0;
+        long right = Long.MAX_VALUE;
+        long timeSpent = 0;
+        long targetTime = 0;
+
+        while (left <= right) {
+            long mid = (left + right) / 2;
+            long sum = 0;
+
+            for (int t : food_times) {
+                sum += Math.min(mid, t);
+            }
+
+            if (sum <= k) {
+                targetTime = mid;
+                timeSpent = sum;
+                left = mid + 1;
+            } else {
+                right = mid - 1;
+            }
         }
-        
-        if (pq.isEmpty()) return -1;
-        
-        List<Food> food = new ArrayList<>(pq);
-        Collections.sort(food, (a, b) -> a.index - b.index);
-        
-        return food.get((int)(k % length)).index;
+
+        List<Food> remaining = new ArrayList<>();
+        for (int i = 0; i < n; i++) {
+            if (food_times[i] > targetTime) {
+                remaining.add(new Food(food_times[i], i + 1));
+            }
+        }
+
+        if (remaining.isEmpty()) return -1;
+
+        remaining.sort(Comparator.comparingInt(f -> f.index));
+
+        long idx = (k - timeSpent) % remaining.size();
+        return remaining.get((int) idx).index;
     }
 }
