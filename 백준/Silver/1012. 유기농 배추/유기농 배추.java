@@ -4,25 +4,28 @@ import java.io.*;
 
 class Main {
 
-    static int T, M, N, K, count;
+    static int T, M, N, K;
+    static int[] dx, dy;
     static int[][] graph;
-    static StringBuilder sb = new StringBuilder(); 
     
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        StringTokenizer st = new StringTokenizer(br.readLine());
 
-        T = Integer.parseInt(br.readLine());
+        T = Integer.parseInt(st.nextToken());
 
-        for (int i = 0; i < T; i++) {
-            StringTokenizer st = new StringTokenizer(br.readLine());
+        dx = new int[] {1, -1, 0, 0};
+        dy = new int[] {0, 0, 1, -1};
 
+        for (int t = 0; t < T; t++) {
+            st = new StringTokenizer(br.readLine());
             M = Integer.parseInt(st.nextToken());
             N = Integer.parseInt(st.nextToken());
             K = Integer.parseInt(st.nextToken());
-
+    
             graph = new int[N][M];
 
-            for (int j = 0; j < K; j++) {
+            for (int i = 0; i < K; i++) {
                 st = new StringTokenizer(br.readLine());
                 int x = Integer.parseInt(st.nextToken());
                 int y = Integer.parseInt(st.nextToken());
@@ -30,38 +33,33 @@ class Main {
                 graph[y][x] = 1;
             }
 
-            count = 0;
-            for (int j = 0; j < N; j++) {
-                for (int k = 0; k < M; k++) {
-                    if (graph[j][k] == 1) {
+            int count = 0;
+            for (int i = 0; i < N; i++) {
+                for (int j = 0; j < M; j++) {
+                    if (graph[i][j] == 1) {
+                        dfs(i, j);
                         count++;
-                        dfs(j, k);
-                    } 
+                    }
                 }
             }
-
-            sb.append(count).append("\n");
-            
+            System.out.println(count);
         }
-
-        System.out.println(sb);
     }
 
-    static boolean dfs(int x, int y) {
-        if (0 > x || x >= N || 0 > y || y >= M) {
-            return false;
+    static void dfs(int y, int x) {
+
+        if (x < 0 || x >= M || y < 0 || y >= N) {
+            return;
         }
 
-        if (graph[x][y] == 1) {
-            graph[x][y] = 0;
-            dfs(x + 1, y);
-            dfs(x - 1, y);
-            dfs(x, y + 1);
-            dfs(x, y - 1);
-
-            return true;
+        if (graph[y][x] == 0) {
+            return;
         }
 
-        return false;
+        graph[y][x] = 0;
+
+        for (int i = 0; i < 4; i++) {
+            dfs(y + dy[i],  x + dx[i]);
+        }
     }
 }
