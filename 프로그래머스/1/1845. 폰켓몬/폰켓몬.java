@@ -4,16 +4,20 @@ class Solution {
     public int solution(int[] nums) {
         int answer = 0;
         
-        HashSet<Integer> pocketmonType = new HashSet<>();
+        int n = nums.length/2;
         
-        int n = nums.length / 2;
+        HashSet<Integer> hs = new HashSet<>();
         
-        for (int i = 0; i < nums.length; i++) {
-            pocketmonType.add(nums[i]);
+        for (int num : nums) {
+            hs.add(num);
         }
-              
-        answer = n > pocketmonType.size() ? pocketmonType.size() : n;
+
         
-        return answer;
+        if (hs.size() > n) {
+            return n;
+        } else {
+            return hs.size();
+        }
+        
     }
 }
