@@ -3,10 +3,10 @@ import java.lang.*;
 import java.io.*;
 
 class Main {
+    static int min = Integer.MAX_VALUE;
+    static int N, M;
 
-    static int N, M, min;
     static boolean[][] graph;
-    
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         StringTokenizer st = new StringTokenizer(br.readLine());
@@ -16,9 +16,9 @@ class Main {
 
         graph = new boolean[N][M];
         for (int i = 0; i < N; i++) {
-            String colors = br.readLine();
+            String input = br.readLine();
             for (int j = 0; j < M; j++) {
-                if (colors.charAt(j) == 'W') {
+                if (input.charAt(j) == 'W') {
                     graph[i][j] = true;
                 } else {
                     graph[i][j] = false;
@@ -26,37 +26,35 @@ class Main {
             }
         }
 
-        int height = N - 7;
-        int width = M - 7;
-        min = Integer.MAX_VALUE;
-        for (int i = 0; i < height; i++) {
-            for (int j = 0; j < width; j++) {
+        for (int i= 0; i < N - 7; i++) {
+            for (int j = 0; j < M - 7; j++) {
                 find(i, j);
             }
         }
         System.out.println(min);
+
     }
 
     static void find(int x, int y) {
-        int dx = x + 8;
-        int dy = y + 8;
-
-        boolean color = graph[x][y];
+        int nx = x + 8;
+        int ny = y + 8;
 
         int count = 0;
-        for (int i = x; i < dx; i++) {
-            for (int j = y; j < dy; j++) {
-                if (graph[i][j] != color) {
+        boolean target = graph[x][y];
+
+        for (int i = x; i < nx; i++) {
+            for (int j = y; j < ny; j++) {
+                if (graph[i][j] != target) {
                     count++;
                 }
-
-                color = (!color);
+                target = !target;
             }
-            color = color == false ? true : false;
+            target = target == false ? true : false;
         }
+
         count = Math.min(count, 64 - count);
 
-        min = Math.min(min, count);
+        min = Math.min(count, min);
+        
     }
-    
 }
