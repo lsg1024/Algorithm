@@ -1,91 +1,60 @@
+import java.util.*;
+
 class Solution {
     
-    static int answer;
-    static int[] U, D, L, R;
-    static int[][] graph;
-    static boolean[][][] visited;
+    static HashSet<String> moves = new HashSet<>();
     
     public int solution(String dirs) {
-        answer = 0;
+        int x = 5, y = 5;
         
-        U = new int[] {-1, 0};
-        D = new int[] {1, 0};
-        L = new int[] {0, -1};
-        R = new int[] {0, 1};
+        for (char dir : dirs.toCharArray()) {
+            if (dir == 'U') {
+                if (0 <= x + 1 && x + 1 < 11 && 0 <= y && y < 11) {
+                    makeKey(dir, x, y);
+                    x += 1;
+                }
+            } else if (dir == 'L') {
+                if (0 <= x && x < 11 && 0 <= y - 1 && y - 1 < 11) {
+                    makeKey(dir, x, y);
+                    y -= 1;
+                }
+            } else if (dir == 'R') {
+                if (0 <= x && x < 11 && 0 <= y + 1 && y + 1 < 11) {
+                    makeKey(dir, x, y);
+                    y += 1;
+                }
+            } else {
+                if (0 <= x - 1 && x - 1 < 11 && 0 <= y && y < 11) {
+                    makeKey(dir, x, y);
+                    x -= 1;
+                }
+            }
+            
+        }
         
-        graph = new int[11][11];
-        visited = new boolean[11][11][4];
-        
-        dfs(5, 5, 0, dirs);
-        
-        return answer;
+        return moves.size() / 2;
     }
     
-    static void dfs(int x, int y, int depth, String dirs) {
-        
-        if (depth == dirs.length()) {
-            return;
-        }
-        
-        char dir = dirs.charAt(depth);
-        int nx = x;
-        int ny = y;
-        
-        if (dir == 'U') {
-            nx += U[0];
-            ny += U[1];
-        } else if (dir == 'D') {
-            nx += D[0];
-            ny += D[1];
-        } else if (dir == 'R') {
-            nx += R[0];
-            ny += R[1];
-        } else if (dir == 'L') {
-            nx += L[0];
-            ny += L[1];
-        }
+    static void makeKey(char dir, int x, int y) {
+        StringBuilder sb1 = new StringBuilder();
+        StringBuilder sb2 = new StringBuilder();
 
-        if (0 <= nx && nx < 11 && 0 <= ny && ny < 11) {
-            
-            int direction = getDirection(dir);
-            int redirection = getReverseDirection(dir);
-            
-            if (!visited[x][y][direction] && !visited[nx][ny][redirection]) {
-                visited[x][y][direction] = true;
-                visited[nx][ny][redirection] = true;
-                answer++;
-            } 
-            
-            dfs(nx, ny, depth + 1, dirs);
-            
+        if (dir == 'U') {
+            sb1.append(x).append(y).append(x + 1).append(y);
+            sb2.append(x + 1).append(y).append(x).append(y);
+        } else if (dir == 'L') {
+            sb1.append(x).append(y).append(x).append(y - 1);
+            sb2.append(x).append(y - 1).append(x).append(y);
+        } else if (dir == 'R') {
+            sb1.append(x).append(y).append(x).append(y + 1);
+            sb2.append(x).append(y + 1).append(x).append(y);
         } else {
-            dfs(x, y, depth + 1, dirs);
+            sb1.append(x).append(y).append(x - 1).append(y);
+            sb2.append(x - 1).append(y).append(x).append(y);
         }
-      
-    }
-    
-     static int getDirection(char dir) {
-         if (dir == 'U') {
-             return 0;
-         } else if (dir == 'D') {
-             return 1;
-         } else if (dir == 'R') {
-             return 2;
-         } else {
-             return 3;
-         }
-    }
-    
-    static int getReverseDirection(char dir) {
-         if (dir == 'U') {
-             return 1;
-         } else if (dir == 'D') {
-             return 0;
-         } else if (dir == 'R') {
-             return 3;
-         } else {
-             return 2;
-         }
+        
+        moves.add(sb1.toString());
+        moves.add(sb2.toString());
     }
     
 }
