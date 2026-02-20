@@ -2,71 +2,73 @@ import java.util.*;
 
 class Solution {
     
-    static HashMap<String, List<Integer>> infoMap = new HashMap<>();
+    static HashMap<String, List<Integer>> map = new HashMap<>();
     
     public int[] solution(String[] info, String[] query) {
         int[] answer = new int[query.length];
         
-        for (String inf : info) {
-            String[] parts = inf.split(" ");
-            infoInsert(parts, 0, "");
+        for (int i = 0; i < info.length; i++) {
+            String[] infos = info[i].split(" ");
+            int score = Integer.parseInt(infos[4]);
+            
+            makeInfo(infos, "", 0, score);
         }
         
-        for (String key : infoMap.keySet()) {
-            Collections.sort(infoMap.get(key));
+        for (String key : map.keySet()) {
+            Collections.sort(map.get(key));
         }
         
         for (int i = 0; i < query.length; i++) {
-            String q = query[i].replaceAll(" and ", " ");
-            String[] qpart = q.split(" ");
-            String key = "";
-            for (int j = 0; j < qpart.length - 1; j++) {
-                key += qpart[j];
-            }
+            String[] q = query[i].replaceAll(" and", "").split(" ");
+            String key = q[0] + q[1] + q[2] + q[3];
+            int targetScore = Integer.parseInt(q[4]);
             
-            int score = Integer.parseInt(qpart[qpart.length - 1]);
-            
-            if (infoMap.containsKey(key)) {
-                List<Integer> scores = infoMap.get(key);
-                answer[i] = lowScore(scores, score);
-            } else {
+            if (!map.containsKey(key)) {
                 answer[i] = 0;
+                continue;
             }
+            
+            List<Integer> scores = map.get(key);
+            answer[i] = scores.size() - getTargetScore(scores, targetScore);
+            
         }
         
         return answer;
     }
     
-    static int lowScore(List<Integer> scores, int target) {
-        int low = 0;
-        int high = scores.size();
+    static void makeInfo(String[] info, String current, int depth, int score) {
         
-        while (low < high) {
-            int mid = (low + high) / 2;
-            
-            if (scores.get(mid) >= target) {
-                high = mid;
-            } else {
-                low = mid + 1;
+        if (depth == 4) {
+            if (!map.containsKey(current)) {
+                map.put(current, new ArrayList<>());
             }
-        }
-        
-        return scores.size() - low;
-    }
-    
-    static void infoInsert(String[] parts, int idx, String key) {
-        
-        if (idx == 4) {
-            if(!infoMap.containsKey(key)){
-                infoMap.put(key, new ArrayList<>());
-            }
-            infoMap.get(key).add(Integer.parseInt(parts[4]));
+            map.get(current).add(score);
             return;
         }
         
-        // 해당 조건을 포함하거나, 와일드카드 '-'를 포함하는 두 가지 경우
-        infoInsert(parts, idx + 1, key + parts[idx]);
-        infoInsert(parts, idx + 1, key + "-");
+
+        
+        makeInfo(info, current + info[depth], depth + 1, score);
+        
+        makeInfo(info, current + "-", depth + 1, score);
+   
+    }
+    
+    static int getTargetScore(List<Integer> scores, int targetScore) {
+        int left = 0;
+        int right = scores.size();
+        
+        while (left < right) {
+            int mid = (left + right) / 2;
+            
+            if (scores.get(mid) >= targetScore) {
+                right = mid;
+            } else {
+                left = mid + 1;
+            }
+        }
+        
+        return left;
     }
     
 }
