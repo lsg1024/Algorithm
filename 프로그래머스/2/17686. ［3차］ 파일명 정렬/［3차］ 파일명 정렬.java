@@ -1,35 +1,63 @@
 import java.util.*;
-import java.util.regex.*;
 
 class Solution {
     public String[] solution(String[] files) {
-        String[] answer = new String[files.length];
+
+        String[][] new_files = new String[files.length][4];
         
-        Arrays.sort(files, (o1, o2) -> {
-            String[] file1 = splitFileName(o1);
-            String[] file2 = splitFileName(o2);
+        for (int i = 0; i < files.length; i++) {
+            String file = files[i];
             
-            int headCompare = file1[0].compareToIgnoreCase(file2[0]);
+            int head_index = 0;
+            int number_index = 0;
+            for (int j = 0; j < file.length(); j++) {
+                if (Character.isDigit(file.charAt(j))) {
+                    
+                    head_index = j;
+                    break;
+
+                }
+            }
+            
+            for (int j = head_index; j < file.length() && j < head_index + 5; j++) {
+                if (!Character.isDigit(file.charAt(j))) {
+                    number_index = j;
+                    break;
+                }
+                number_index = j + 1;
+            }
+            
+            String head = file.substring(0, head_index);
+            String number = file.substring(head_index, number_index);
+            String tail = file.substring(number_index);
+            
+            new_files[i][0] = head;
+            new_files[i][1] = number;
+            new_files[i][2] = tail;
+            new_files[i][3] = file;
+        }
+        
+        Arrays.sort(new_files, (o1, o2) -> {
+            int headCompare = o1[0].toLowerCase().compareTo(o2[0].toLowerCase());
+            
             if (headCompare != 0) {
                 return headCompare;
             }
             
-            int num1 = Integer.parseInt(file1[1]);
-            int num2 = Integer.parseInt(file2[1]);
-            return Integer.compare(num1, num2);
+            int numA = Integer.parseInt(o1[1]);
+            int numB = Integer.parseInt(o2[1]);
+            
+            return numA - numB;
+            
         });
         
-        return files;
-    }
-    
-    static String[] splitFileName(String file) {
-        Matcher matcher = Pattern.compile("([a-zA-Z .-]+)([0-9]+)(.*)").matcher(file);
         
-        if (matcher.matches()) {
-            String head = matcher.group(1);
-            String number = matcher.group(2);
-            return new String[] { head, number };
+        String[] answer = new String[files.length];
+        
+        for (int i = 0; i < files.length; i++) {
+            answer[i] = new_files[i][3];
         }
-        return new String[] { "", "" };
+        
+        return answer;
     }
 }
