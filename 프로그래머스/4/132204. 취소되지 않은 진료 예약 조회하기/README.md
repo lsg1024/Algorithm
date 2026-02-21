@@ -16,7 +16,7 @@ Empty
 
 ### 제출 일자
 
-2025년 01월 11일 22:40:50
+2026년 02월 21일 12:38:35
 
 ### 문제 설명
 
@@ -310,13 +310,41 @@ Empty
 </tbody>
       </table>
 <p>SQL을 실행하면 다음과 같이 출력되어야 합니다.</p>
-
-<p>| APNT<u>NO | PT</u>NAME | PT<u>NO | MCDP</u>CD | DR<u>NAME | APNT</u>YMD</p>
-
-<p>| -- | -- | -- | -- | -- | -- |<br>
-| 46 | 오스왈드 | PT22000043 | CS | 루피 | 2022-04-13 09:00:00.000000 |<br>
-| 42 | 몬몬 | PT22000071 | CS | 루피 | 2022-04-13 12:30:00.000000 |<br>
-| 43 | 바라 | PT22000019 | CS | 니모 | 2022-04-13 15:30:00.000000 |</p>
-
+<table class="table">
+        <thead><tr>
+<th>APNT_NO</th>
+<th>PT_NAME</th>
+<th>PT_NO</th>
+<th>MCDP_CD</th>
+<th>DR_NAME</th>
+<th>APNT_YMD</th>
+</tr>
+</thead>
+        <tbody><tr>
+<td>46</td>
+<td>오스왈드</td>
+<td>PT22000043</td>
+<td>CS</td>
+<td>루피</td>
+<td>2022-04-13 09:00:00.000000</td>
+</tr>
+<tr>
+<td>42</td>
+<td>몬몬</td>
+<td>PT22000071</td>
+<td>CS</td>
+<td>루피</td>
+<td>2022-04-13 12:30:00.000000</td>
+</tr>
+<tr>
+<td>43</td>
+<td>바라</td>
+<td>PT22000019</td>
+<td>CS</td>
+<td>니모</td>
+<td>2022-04-13 15:30:00.000000</td>
+</tr>
+</tbody>
+      </table>
 
 > 출처: 프로그래머스 코딩 테스트 연습, https://school.programmers.co.kr/learn/challenges
