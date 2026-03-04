@@ -1,73 +1,96 @@
 import java.util.*;
 
-class Word {
-    String word;
-    int count;
-    
-    public Word(String word, int count) {
-        this.word = word;
-        this.count = count;
-    }
-    
-}
-
 class Solution {
     
-    static boolean[] visited;
+    static int answer = Integer.MAX_VALUE;
+    static int target_index = Integer.MAX_VALUE;
+    static List<List<Integer>> graph = new ArrayList<>();
     
     public int solution(String begin, String target, String[] words) {
-        int answer = 0;
+
+        graph.clear();
+        answer = Integer.MAX_VALUE;
+        target_index = Integer.MAX_VALUE;
+
+        for (int i = 0; i < words.length; i++) {
+            graph.add(new ArrayList<>());
+        }
         
-        if (!Arrays.asList(words).contains(target)) {
+        // target index 찾기
+        for (int i = 0; i < words.length; i++) {
+            if (words[i].equals(target)) {
+                target_index = i;
+            }
+        }
+        
+        // target 없으면 0
+        if (target_index == Integer.MAX_VALUE) {
             return 0;
         }
         
-        for (int i = 0; i < words.length; i++) {
-            answer = bfs(begin, target, words);
-        }
-        
-        return answer;
-    }
-    
-    // 이미 안되는건 걸렀으니깐 최단 경로로 단어 변환 수 세기
-    static int bfs(String begin, String target, String[] words) {
-        Queue<Word> queue = new LinkedList<>();
-        queue.offer(new Word(begin, 0));
-        visited = new boolean[words.length];
-        
-        while (!queue.isEmpty()) {
-            Word data = queue.poll();
-            
-            if (data.word.equals(target)) {
-                return data.count;
-            }
-            
-            for (int i = 0; i < words.length; i++) {
-                // Word.word와 1개 다른 값들을 주입 = true 반환
-                if (!visited[i] && check(data.word, words[i])) {
-                    queue.offer(new Word(words[i], data.count + 1));
-                    visited[i] = true;
+        // 그래프 생성 (한 글자 차이만 연결)
+        for (int i = 0; i < words.length - 1; i++) {
+            for (int j = i + 1; j < words.length; j++) {
+                
+                int count = 0;
+                
+                for (int k = 0; k < words[i].length(); k++) {
+                    if (words[i].charAt(k) != words[j].charAt(k)) {
+                        count++;
+                    }
+                    if (count > 1) break;
+                }
+                
+                if (count == 1) {  // 수정 부분
+                    graph.get(i).add(j);
+                    graph.get(j).add(i);
                 }
             }
-            
         }
         
-        return 0;
-        
-    }
-    
-    static boolean check(String start, String end) {
-        
-        int cnt = 0;
-        
-        for (int i = 0; i < start.length(); i++) {
-            if (start.charAt(i) == end.charAt(i)) {
-                cnt++;
+        // begin과 직접 연결되는 단어만 BFS 시작
+        for (int i = 0; i < words.length; i++) {
+            
+            int count = 0;
+            for (int j = 0; j < begin.length(); j++) {
+                if (begin.charAt(j) != words[i].charAt(j)) {
+                    count++;
+                }
+                if (count > 1) break;
+            }
+            
+            if (count == 1) {   // 수정 부분
+                find(i, words);
             }
         }
         
-        // 값이 1라면 변환 가능한 단어
-        return cnt == start.length() - 1 ? true : false;
+        return answer == Integer.MAX_VALUE ? 0 : answer;
     }
     
+    static void find(int index, String[] words) {
+        Queue<int[]> queue = new LinkedList<>();
+        queue.add(new int[] {index, 1});
+        boolean[] visited = new boolean[words.length];
+        visited[index] = true;
+        
+        while (!queue.isEmpty()) {
+            int[] current = queue.poll();
+            int x = current[0];
+            int depth = current[1];
+            
+            if (x == target_index) {
+                answer = Math.min(answer, depth);
+                return;  // BFS 특성상 여기서 종료
+            }
+
+            for (int i = 0; i < graph.get(x).size(); i++) {
+                Integer next_index = graph.get(x).get(i);
+                
+                if (!visited[next_index]) {
+                    visited[next_index] = true;
+                    queue.add(new int[] {next_index, depth + 1});
+                }
+            }
+        }
+    }
 }
