@@ -1,58 +1,64 @@
 import java.util.*;
 
 class Solution {
-    
-    String op[][] = { { "+", "-", "*" }, { "+", "*", "-" }, { "-", "*", "+" }, 
-                         { "-", "+", "*" }, { "*", "-", "+" }, { "*", "+", "-" } };
-    
     public long solution(String expression) {
         long answer = 0;
         
-        StringTokenizer st = new StringTokenizer(expression, "*+-", true);
+        List<String> tokens = new ArrayList<>();
+        StringTokenizer st = new StringTokenizer(expression, "*-+", true);
         
-        int size = st.countTokens();
-        List<Long> numbers = new ArrayList<>();
-        List<String> signs = new ArrayList<>();
-        for (int i = 0; i < size; i++) {
-            String token = st.nextToken();
-            
-            if ("*+-".contains(token)) {
-                signs.add(token);
-            } else {
-                numbers.add(Long.parseLong(token));
-            }
+        while (st.hasMoreTokens()) {
+            tokens.add(st.nextToken());
         }
         
-        for (String[] priority : op) {
-            List<Long> new_numbers = new ArrayList<>(numbers);
-            List<String> new_signs = new ArrayList<>(signs);
+        String[][] operters = new String[][] {
+            {"*", "+", "-"},
+            {"*", "-", "+"},
+            {"+", "*", "-"},
+            {"+", "-", "*"},
+            {"-", "+", "*"},
+            {"-", "*", "+"}
+        };
+        
+        for (String[] operter : operters) {
             
-            for (String operator : priority) {
-                for (int i = 0; i < new_signs.size();) {
-                    if (new_signs.get(i).equals(operator)) {
-                        long result = calculate(new_numbers.get(i), new_numbers.get(i + 1), operator);
-                        new_numbers.set(i, result);
-                        new_numbers.remove(i + 1);
-                        new_signs.remove(i);
+            List<String> temp = new ArrayList<>(tokens);
+            
+            for (String op : operter) {
+                List<String> newList = new ArrayList<>();
+                
+                for (int i = 0; i < temp.size(); i++) {
+                    
+                    String value = temp.get(i);
+                    if (value.equals(op)) {
+                        
+                        long left = Long.parseLong(newList.remove(newList.size() - 1));
+                        long right = Long.parseLong(temp.get(++i));
+                        
+                        long result = 0L;
+                        if (op.equals("*")) {
+                            result = left * right;
+                            
+                        } else if (op.equals("+")) {
+                            result = left + right;
+                        } else {
+                            result = left - right; 
+                        }
+                        newList.add(String.valueOf(result));
                     } else {
-                        i++;
+                        newList.add(value);
                     }
+                    
                 }
+                
+                temp = newList;
             }
             
-            answer = Math.max(answer, Math.abs(new_numbers.get(0)));
+            answer = Math.max(answer,
+                    Math.abs(Long.parseLong(temp.get(0))));
+            
         }
         
         return answer;
-    }
-    
-    static long calculate(long num1, long num2, String op) {
-        if (op.equals("*")) {
-            return num1 * num2;
-        } else if (op.equals("+")) {
-            return num1 + num2;
-        } else {
-            return num1 - num2;
-        }
     }
 }
