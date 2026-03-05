@@ -2,45 +2,49 @@ import java.util.*;
 
 class Solution {
     
-    static HashMap<String, Integer> word_package = new HashMap<>();
+    static int dic = 27;
+    static List<Integer> out_put = new ArrayList<>();
+    static HashMap<String, Integer> words = new HashMap<>();
     
     public int[] solution(String msg) {
         int[] answer;
         
         for (int i = 0; i < 26; i++) {
-            word_package.put(Character.toString(i + 'A'), i + 1);
+            words.put(String.valueOf((char) ('A' + i)), i + 1);
         }
         
-        ArrayList<Integer> number_package = new ArrayList<>();
+        String[] s_msg = msg.split("");
+        ArrayList<String> msgList = new ArrayList<>();
         
-        int index = 27;
+        for (int i = 0; i < s_msg.length; i++) {
+            msgList.add(s_msg[i]);
+        }
         
-        while(!msg.isEmpty()) {
-            String word = "";
-            int i = 0;
+        String w = "";
+        
+        for (char c : msg.toCharArray()) {
+            String wc = w + c;
             
-            while (i < msg.length() && word_package.containsKey(msg.substring(0, i + 1))) {
-                word = msg.substring(0, i + 1);
-                i++;
+            if (words.containsKey(wc)) {
+                w = wc;
+            } else {
+                out_put.add(words.get(w));
+                words.put(wc, dic++);
+                w = String.valueOf(c);
             }
             
-            number_package.add(word_package.get(word));
-            
-            if (i < msg.length()) {
-                String next_word = msg.substring(0, i + 1);
-                word_package.put(next_word, index++);
-            }
-            
-            msg = msg.substring(word.length());
         }
         
-        answer = new int[number_package.size()];
-        for (int i = 0; i < number_package.size(); i++) {
-            answer[i] = number_package.get(i);
+        if (!w.isEmpty()) {
+            out_put.add(words.get(w));
         }
-        
+
+        answer = new int[out_put.size()];
+        for (int i = 0; i < out_put.size(); i++) {
+            answer[i] = out_put.get(i);
+        }
         
         return answer;
     }
-
+    
 }
