@@ -2,15 +2,14 @@ import java.util.*;
 
 class Solution {
     
-    static String answer = "";
+    static
     
     public String solution(String p) {
+        String answer = "";
         
-        if (isCorrect(p)) {
-            return p;
-        }
+        String result = func(p);
         
-        return func(p);
+        return result;
     }
     
     static String func(String p) {
@@ -19,46 +18,46 @@ class Solution {
             return "";
         }
         
-        String u = "", v = "";
-        int count = 0;
+        int left = 0;
+        int right = 0;
+        String u = "";
+        String v = "";
         
-        for (int i = 0; i < p.length(); i++) {
-            char c = p.charAt(i);
-            
+        for (char c : p.toCharArray()) {
             if (c == '(') {
-                count += 1;
+                left++;
             } else {
-                count -= 1;
+                right++;
             }
             
-            u += c;
-            
-            if (count == 0) {
-                v = p.substring(i + 1);
+            if (left == right) {
+                u = p.substring(0, left + right);
+                v = p.substring(left + right);
                 break;
             }
-            
         }
         
-        if (isCorrect(u)) {
+        // u 검증 true 올바른, false 틀린
+        if (isValid(u)) {
             return u + func(v);
         } else {
-            StringBuilder sb = new StringBuilder();
-            sb.append("(").append(func(v)).append(")");
-            sb.append(reverse(u.substring(1, u.length() - 1)));
-            return sb.toString();
+            String uu = u.substring(1, u.length() - 1);
+            String vv = makeValid(uu);
+
+            return "(" + func(v) + ")" + vv;
         }
         
     }
     
-    static boolean isCorrect(String s) {
+    static boolean isValid(String w) {
+        
         int count = 0;
         
-        for (char c : s.toCharArray()) {
+        for (char c : w.toCharArray()) {
             if (c == '(') {
-                count += 1;
+                count++;
             } else {
-                count -= 1;
+                count--;
             }
             
             if (count < 0) {
@@ -66,18 +65,21 @@ class Solution {
             }
         }
         
-        return true;
+        return count == 0;
     }
     
-    static String reverse(String s) {
+    // 재귀 처리
+    static String makeValid(String s) {
         StringBuilder sb = new StringBuilder();
+        
         for (char c : s.toCharArray()) {
             if (c == '(') {
-                sb.append(")");
+                sb.append(')');
             } else {
-                sb.append("(");
+                sb.append('(');
             }
         }
+        
         return sb.toString();
     }
     
