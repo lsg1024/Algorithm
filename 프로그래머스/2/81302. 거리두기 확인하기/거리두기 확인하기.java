@@ -2,30 +2,30 @@ import java.util.*;
 
 class Solution {
     
-    static String[][] maps;
-    static int[] dx = new int[] {1, -1, 0, 0};
-    static int[] dy = new int[] {0, 0, 1, -1};
+    static int[] dx = {1, -1, 0, 0};
+    static int[] dy = {0, 0, 1, -1};
+    static String[][] graph;
     
     public int[] solution(String[][] places) {
-        int[] answer = new int[places.length];
-
+        int[] answer = new int[5];
+        
         for (int i = 0; i < places.length; i++) {
+            
+            graph = new String[5][5];
             String[] place = places[i];
             
-            maps = new String[5][5];
-            
-            for (int j = 0; j < 5; j++) {
-                String input = place[j];
-                for (int k = 0; k < 5; k++) {
-                    String p = String.valueOf(input.charAt(k));
-                    maps[j][k] = p;
+            for (int j = 0; j < places[i].length; j++) {
+                String p = place[j];
+                for (int k = 0; k < p.length(); k++) {
+                    String pp = String.valueOf(p.charAt(k));
+                    graph[j][k] = pp;
                 }
             }
             
             boolean isValid = true;
             for (int j = 0; j < 5; j++) {
                 for (int k = 0; k < 5; k++) {
-                    if (maps[j][k].equals("P")) {
+                    if (graph[j][k].equals("P")) {
                         if (!bfs(j, k)) {  
                             isValid = false;
                             break;
@@ -34,9 +34,9 @@ class Solution {
                 }
             }
             
-            answer[i] = isValid == true ? 1 : 0;
-
+            answer[i] = isValid ? 1 : 0;
         }
+        
         
         return answer;
     }
@@ -49,30 +49,28 @@ class Solution {
         
         while (!queue.isEmpty()) {
             int[] current = queue.poll();
-            int nx = current[0];
-            int ny = current[1];
-            int dist = current[2];
+            x = current[0];
+            y = current[1];
+            int depth = current[2];
             
-            if (dist > 0 && dist <= 2 && maps[nx][ny].equals("P")) {
+            if (0 < depth && depth < 3 && graph[x][y].equals("P")) {
                 return false;
             }
             
-            if (dist >= 2) {
-                continue;
-            }
+            if (depth > 3) continue;
             
             for (int i = 0; i < 4; i++) {
-                int nnx = nx + dx[i];
-                int nny = ny + dy[i];
+                int nx = x + dx[i];
+                int ny = y + dy[i];
                 
-                if (0 <= nnx && nnx < 5 && 0 <= nny && nny < 5 && !visited[nnx][nny] && !maps[nnx][nny].equals("X")) {
-                    queue.add(new int[] {nnx, nny, dist + 1});
-                    visited[nnx][nny] = true;
+                if (0 <= nx && nx < 5 && 0 <= ny && ny < 5 && !visited[nx][ny] && !graph[nx][ny].equals("X")) {
+                    visited[nx][ny] = true;
+                    queue.add(new int[] {nx,ny, depth + 1});
                 }
             }
-            
         }
         
         return true;
     }
+    
 }
