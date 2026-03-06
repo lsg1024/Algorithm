@@ -2,77 +2,72 @@ import java.util.*;
 import java.lang.*;
 import java.io.*;
 
-// 1 익은 토마토 0 익지 않은 토마토 -1 토마토 없음
+// The main method must be in a class named "Main".
 class Main {
-    static int n, m;
-    static int[] dx, dy;
-    static int[][] box;
+
+    static int M, N;
+    static int[] dx = {1, -1 ,0, 0};
+    static int[] dy = {0, 0, 1, -1};
+    static int[][] graph;
     
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         StringTokenizer st = new StringTokenizer(br.readLine());
 
-        m = Integer.parseInt(st.nextToken());
-        n = Integer.parseInt(st.nextToken());
+        M = Integer.parseInt(st.nextToken());
+        N = Integer.parseInt(st.nextToken());
 
-        dx = new int[] {1, -1, 0, 0};
-        dy = new int[] {0, 0, 1, -1};
-
-        box = new int[n][m];
+        graph = new int[N][M];
 
         Queue<int[]> queue = new LinkedList<>();
-        for (int i = 0; i < n; i++) {
-            st = new StringTokenizer(br.readLine());
-            for (int j = 0; j < m; j++) {
-                int status = Integer.parseInt(st.nextToken());
-                box[i][j] = status;
-                if (status == 1) {
+        for (int i = 0; i < N; i++) {
+            st = new StringTokenizer(br.readLine(), " ", false);
+            for (int j = 0; j < M; j++) {
+                int number = Integer.parseInt(st.nextToken());
+                graph[i][j] = number;
+
+                if (number == 1) {
                     queue.add(new int[] {i, j});
                 }
             }
         }
 
-        System.out.println(bfs(queue));
-        
+        System.out.print(bfs(queue));
+
     }
 
-    static int bfs(Queue<int[]> q) {
+    static int bfs(Queue<int[]> queue) {
+        int date = -1;
 
-        int days = -1;
+        while (!queue.isEmpty()) {
+            int[] current = queue.poll();
+            int x = current[0];
+            int y = current[1];
 
-        while (!q.isEmpty()) {
-            
-            int size = q.size();
-            days++;
-            
-            for (int i = 0; i < size; i++) {
-                int[] current = q.poll();
-                int nx = current[0];
-                int ny = current[1];
+            for (int i = 0; i < 4; i++) {
+                int nx = x + dx[i];
+                int ny = y + dy[i];
 
-                for (int j = 0; j < 4; j++) {
-                    int nnx = nx + dx[j];
-                    int nny = ny + dy[j];
-                    
-                    if (0 <= nnx && nnx < n && 0 <= nny && nny < m && box[nnx][nny] == 0) {
-                        box[nnx][nny] = 1;
-                        q.add(new int[] {nnx, nny});
-                    }
-                } 
-            }  
+                if (0 <= nx && nx < N && 0 <= ny && ny < M && graph[nx][ny] == 0) {
+
+                    queue.add(new int[] {nx, ny});
+                    graph[nx][ny] = graph[x][y] + 1;
+                    date = Math.max(date, graph[nx][ny]);
+     
+                }
+            }
         }
 
-        for (int i = 0; i < n; i++) {
-            for (int j = 0; j < m; j++) {
-                if (box[i][j] == 0) {
+        for (int i = 0; i < N; i++) {
+            for (int j = 0; j < M; j++) {
+                if (graph[i][j] == 0) {
                     return -1;
                 }
             }
         }
 
-        return days;
-
-        
+        return date == -1 ? 0 : date - 1;
     }
-}
 
+    
+}
