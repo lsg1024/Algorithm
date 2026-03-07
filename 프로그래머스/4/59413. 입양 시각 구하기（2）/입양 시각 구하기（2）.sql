@@ -1,2 +1,33 @@
 -- 코드를 입력하세요
-SELECT
+WITH RECURSIVE TIME AS (
+    SELECT 
+        0 AS HOUR, 
+        0 AS COUNT
+    
+    UNION 
+    
+    SELECT 
+        HOUR + 1,
+        0
+    FROM 
+        TIME
+    WHERE
+        HOUR < 23
+),
+TIME_TABLE AS (
+    SELECT
+        HOUR(AO.DATETIME) AS HOUR,
+        COUNT(*) AS COUNT
+    FROM
+        ANIMAL_OUTS AO
+    GROUP BY HOUR
+    ORDER BY HOUR
+)
+
+SELECT 
+    T.HOUR,
+    IFNULL(TT.COUNT, 0) AS COUNT
+FROM 
+    TIME T
+LEFT JOIN TIME_TABLE TT ON T.HOUR = TT.HOUR
+GROUP BY T.HOUR
