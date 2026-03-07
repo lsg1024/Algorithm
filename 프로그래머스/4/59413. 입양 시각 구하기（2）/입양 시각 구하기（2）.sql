@@ -1,14 +1,10 @@
 -- 코드를 입력하세요
 WITH RECURSIVE TIME AS (
     SELECT 
-        0 AS HOUR, 
-        0 AS COUNT
-    
+        0 AS HOUR
     UNION 
-    
     SELECT 
-        HOUR + 1,
-        0
+        HOUR + 1
     FROM 
         TIME
     WHERE
